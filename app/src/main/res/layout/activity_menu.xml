@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/logo_margin"
+    tools:context=".MenuActivity">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/Menu_logo_IMG"
+        android:layout_width="@dimen/logo_dimen"
+        android:layout_height="@dimen/logo_dimen"
+        android:src="@drawable/roamnote_logo"
+        android:contentDescription="@string/logo"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/menu_TXT_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/roamnote"
+        android:textSize="@dimen/app_name_size"
+        android:textStyle="bold"
+        android:textColor="@color/text_color"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/logo_margin" />
+
+    <LinearLayout
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/menu_BTN_trips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="@string/menu_txt_trips"
+            app:strokeWidth="@dimen/menu_stroke_width"
+            app:strokeColor="@color/text_color"
+            android:backgroundTint="@android:color/white"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/menu_btn_tsize"
+            android:layout_margin="@dimen/menu_button_margin"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/menu_BTN_dailylog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="@string/menu_txt_daily_log"
+            app:strokeWidth="@dimen/menu_stroke_width"
+            app:strokeColor="@color/text_color"
+            android:backgroundTint="@android:color/white"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/menu_btn_tsize"
+            android:layout_margin="@dimen/menu_button_margin"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/menu_BTN_map"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="@string/menu_txt_map"
+            app:strokeWidth="@dimen/menu_stroke_width"
+            app:strokeColor="@color/text_color"
+            android:backgroundTint="@android:color/white"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/menu_btn_tsize"
+            android:layout_margin="@dimen/menu_button_margin"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/menu_BTN_Forum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="@string/menu_txt_forum"
+            app:strokeWidth="@dimen/menu_stroke_width"
+            app:strokeColor="@color/text_color"
+            android:backgroundTint="@android:color/white"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/menu_btn_tsize"
+            android:layout_margin="@dimen/menu_button_margin"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            />
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".TripsActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/Menu_logo_IMG"
+                android:layout_width="@dimen/logo_dimen"
+                android:layout_height="@dimen/logo_dimen"
+                android:src="@drawable/roamnote_logo"
+                android:contentDescription="@string/logo"
+                android:layout_marginTop="@dimen/logo_margin"
+                android:layout_weight="1"
+                />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/trips_TXT_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/trips_txt_trips"
+                android:textSize="@dimen/trips_title_size"
+                android:textColor="@color/Bagy_blue"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+
+                />
+
+
+
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/zero_margin"
+            android:layout_margin="@dimen/logo_margin"
+            android:backgroundTint="@color/Bagy_orange"
+            android:textColor="@color/white"
+            android:text="@string/trips_add_trip"
+            android:layout_weight="1"
+            android:layout_marginTop="55dp"
+            />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/main_RV_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        tools:listitem="@layout/trip_item" />
+
+</LinearLayout>

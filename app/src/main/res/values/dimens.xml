@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="logo_margin">16dp</dimen>
+    <dimen name="menu_stroke_width">2dp</dimen>
+    <dimen name="menu_button_margin">10dp</dimen>
+    <dimen name="menu_btn_tsize">30sp</dimen>
+    <dimen name="logo_dimen">120dp</dimen>
+    <dimen name="app_name_size">50sp</dimen>
+    <dimen name="login_title_margin">32dp</dimen>
+    <dimen name="login_mail_padding">10dp</dimen>
+    <dimen name="login_linew_margin">8dp</dimen>
+    <dimen name="login_lineh_margin">1dp</dimen>
+    <dimen name="trip_item_img_dimen">160dp</dimen>
+    <dimen name="zero_margin">0dp</dimen>
+    <dimen name="cardview_elevation_dimen">4dp</dimen>
+    <dimen name="trip_item_title_size">30sp</dimen>
+    <dimen name="trips_title_size">40sp</dimen>
+    <dimen name="log_button_b_margin">8dp</dimen>
+    <dimen name="log_padding">12dp</dimen>
+    <dimen name="log_button_size">22sp</dimen>
+    <dimen name="log_save_BTN_size">25sp</dimen>
+    <dimen name="log_loc_photo_dimen">70dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="login_create_account_size">16sp</dimen>
+</resources>

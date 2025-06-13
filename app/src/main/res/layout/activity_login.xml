@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:padding="@dimen/logo_margin"
+    tools:context=".LogInActivity">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/LogIn_logo_IMG"
+        android:layout_width="@dimen/logo_dimen"
+        android:layout_height="@dimen/logo_dimen"
+        android:src="@drawable/roamnote_logo"
+        android:contentDescription="@string/logo"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/logo_margin" />
+
+    <!-- App Title -->
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/roamnote"
+        android:textSize="@dimen/app_name_size"
+        android:textStyle="bold"
+        android:textColor="@color/Bagy_blue"
+        android:layout_gravity="center"
+ />
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login_txt_login_your_account"
+        android:textSize="@dimen/log_button_size"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/logo_margin" />
+
+    <!-- Email Input -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edit_text_box"
+        android:orientation="vertical"
+        android:padding="@dimen/logo_margin"
+        android:layout_marginHorizontal="@dimen/logo_margin"
+        android:layout_marginTop="@dimen/logo_margin"
+        android:layout_marginBottom="@dimen/logo_margin">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/emailEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/login_txt_email"
+            android:inputType="textEmailAddress"
+            android:background="@android:color/transparent"
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:padding="@dimen/login_mail_padding"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/login_lineh_margin"
+            android:background="@color/gray"
+            android:layout_marginVertical="@dimen/login_linew_margin"/>
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/passwordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/login_txt_password"
+            android:inputType="textPassword"
+            android:background="@android:color/transparent"
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:padding="@dimen/login_mail_padding"/>
+    </LinearLayout>
+
+    <!-- Login Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/login_BTN"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/Bagy_blue"
+        android:layout_marginTop="@dimen/logo_margin"
+        android:text="@string/login_txt_log_in"
+        />
+
+    <!-- Register Redirect -->
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/register_TXT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login_txt_register"
+        android:textColor="@color/Bagy_orange"
+        android:layout_marginTop="@dimen/logo_margin"
+        android:textSize="@dimen/login_create_account_size"
+        android:layout_gravity="center"/>
+
+</LinearLayout>

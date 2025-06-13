@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SignUpActivity"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/LogIn_logo_IMG"
+        android:layout_width="@dimen/logo_dimen"
+        android:layout_height="@dimen/logo_dimen"
+        android:src="@drawable/roamnote_logo"
+        android:contentDescription="@string/logo"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/logo_margin" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/create_new_acount"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:textColor="@color/Bagy_blue"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/logo_margin" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edit_text_box"
+        android:orientation="vertical"
+        android:padding="@dimen/logo_margin"
+        android:layout_marginHorizontal="@dimen/logo_margin"
+        android:layout_marginTop="@dimen/logo_margin">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/signup_full_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/signup_txt_full_name"
+            android:inputType="textEmailAddress"
+            android:background="@android:color/transparent"
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:padding="@dimen/login_mail_padding"/>
+
+    </LinearLayout>
+
+    <!-- Email Input -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edit_text_box"
+        android:orientation="vertical"
+        android:padding="@dimen/logo_margin"
+        android:layout_marginHorizontal="@dimen/logo_margin"
+        android:layout_marginTop="@dimen/logo_margin">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/signup_email_EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/login_txt_email"
+            android:inputType="textEmailAddress"
+            android:background="@android:color/transparent"
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:padding="@dimen/login_mail_padding"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edit_text_box"
+        android:orientation="vertical"
+        android:padding="@dimen/logo_margin"
+        android:layout_marginHorizontal="@dimen/logo_margin"
+        android:layout_marginTop="@dimen/logo_margin">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/signup_password_EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/login_txt_password"
+            android:inputType="textEmailAddress"
+            android:background="@android:color/transparent"
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:padding="@dimen/login_mail_padding"/>
+
+    </LinearLayout>
+
+
+
+    <!-- Login Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/login_BTN"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/Bagy_blue"
+        android:layout_marginTop="@dimen/logo_margin"
+        android:layout_marginHorizontal="@dimen/logo_margin"
+        android:text="@string/signup_txt_Register"
+        />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/register_TXT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/signup_txt_have_account"
+        android:textColor="@color/Bagy_orange"
+        android:layout_marginTop="@dimen/logo_margin"
+        android:textSize="@dimen/login_create_account_size"
+        android:layout_gravity="center"
+        android:clickable="true"
+        android:focusable="true"/>
+
+
+</LinearLayout>
