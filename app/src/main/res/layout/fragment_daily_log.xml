@@ -2,11 +2,10 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.DailyLogActivity"
-    >
+    android:orientation="vertical"
+    tools:context=".ui.DailyLogFragment">
 
 
     <LinearLayout
@@ -15,41 +14,17 @@
         android:orientation="vertical"
         >
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/log_LBL_title"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="@dimen/logo_margin"
-            android:layout_gravity="center_vertical"
-            >
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/log_arrow_back"
-                android:layout_width="@dimen/app_name_size"
-                android:layout_height="@dimen/app_name_size"
-                app:srcCompat="@drawable/outline_arrow_back"
-                android:contentDescription="@string/log_back_button"
-                android:tint="@color/Bagy_blue"
-                android:clickable="true"
-                android:focusable="true"
-                android:layout_marginEnd="12dp"
-                android:layout_weight="1"
-                />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/log_LBL_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/daily_log_title"
-                android:textStyle="bold"
-                android:textSize="@dimen/trips_title_size"
-                android:textColor="@color/Bagy_blue"
-                android:layout_weight="4"
-                />
-
-
-
-
-        </LinearLayout>
+            android:text="@string/daily_log_title"
+            android:textStyle="bold"
+            android:textSize="@dimen/trips_title_size"
+            android:textColor="@color/Bagy_blue"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/login_title_margin"
+            />
 
         <LinearLayout
             android:id="@+id/trip_selector"
@@ -72,6 +47,20 @@
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textSize="@dimen/log_button_size"
+                />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/add_trip_selector_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/log_add"
+                android:textColor="@color/Bagy_blue"
+                android:textStyle="bold"
+                android:textSize="@dimen/log_button_size"
+                android:gravity="end"
+                android:layout_marginEnd="@dimen/logo_margin"
+                android:clickable="true"
+                android:focusable="true"
                 />
 
         </LinearLayout>
@@ -99,6 +88,21 @@
                 android:textSize="@dimen/log_button_size"
                 />
 
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/add_date_selector_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/log_add"
+                android:textColor="@color/Bagy_blue"
+                android:textStyle="bold"
+                android:textSize="@dimen/log_button_size"
+                android:gravity="end"
+                android:layout_marginEnd="@dimen/logo_margin"
+                android:clickable="true"
+                android:focusable="true"
+                />
+
         </LinearLayout>
 
         <LinearLayout
@@ -122,6 +126,20 @@
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 android:textSize="@dimen/log_button_size"
+                />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/add_hotel_selector_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/log_add"
+                android:textColor="@color/Bagy_blue"
+                android:textStyle="bold"
+                android:textSize="@dimen/log_button_size"
+                android:gravity="end"
+                android:layout_marginEnd="@dimen/logo_margin"
+                android:clickable="true"
+                android:focusable="true"
                 />
 
         </LinearLayout>
@@ -155,16 +173,16 @@
                 android:layout_marginVertical="@dimen/login_linew_margin"/>
 
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/log_add_expense"
-                    app:textAllCaps="true"
-                    android:textColor="@color/text_color"
-                    android:textSize="@dimen/log_button_size"
-                    android:textStyle="bold"
-                    android:clickable="true"
-                    android:focusable="true"/>
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/log_add_expense"
+                app:textAllCaps="true"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/log_button_size"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true"/>
 
 
 
@@ -278,19 +296,7 @@
 
             </LinearLayout>
 
-
         </LinearLayout>
-
-<!--    <com.google.android.material.button.MaterialButton-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="center"-->
-<!--        android:layout_marginHorizontal="@dimen/logo_margin"-->
-<!--        android:backgroundTint="@color/Bagy_orange"-->
-<!--        android:text="@string/log_save"-->
-<!--        android:textSize="@dimen/log_save_BTN_size"-->
-<!--        />-->
-
 
     </LinearLayout>
 

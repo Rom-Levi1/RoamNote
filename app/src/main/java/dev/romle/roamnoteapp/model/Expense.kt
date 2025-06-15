@@ -1,6 +1,6 @@
 package dev.romle.roamnoteapp.model
 
-data class Expense(
+data class Expense private constructor(
     val name: String,
     val tags: List<String>,
     val cost: Double,

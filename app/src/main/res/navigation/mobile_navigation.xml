@@ -3,23 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@id/navigation_trips">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="dev.romle.roamnoteapp.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/navigation_trips"
+        android:name="dev.romle.roamnoteapp.ui.TripsFragment"
+        android:label="@string/title_trips"
+        tools:layout="@layout/fragment_trips" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="dev.romle.roamnoteapp.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_day_log"
+        android:name="dev.romle.roamnoteapp.ui.DailyLogFragment"
+        android:label="@string/title_day_log"
+        tools:layout="@layout/fragment_daily_log" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="dev.romle.roamnoteapp.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_map"
+        android:name="dev.romle.roamnoteapp.ui.MapFragment"
+        android:label="@string/title_map"
+        tools:layout="@layout/fragment_map" />
+
+    <fragment
+        android:id="@+id/navigation_Forum"
+        android:name="dev.romle.roamnoteapp.ui.ForumFragment"
+        android:label="@string/title_Forum"
+        tools:layout="@layout/fragment_forum" />
+
 </navigation>

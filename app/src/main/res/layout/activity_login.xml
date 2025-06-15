@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:layout_gravity="center"
     android:padding="@dimen/logo_margin"
-    tools:context=".LogInActivity">
+    tools:context=".ui.LogInActivity">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/LogIn_logo_IMG"

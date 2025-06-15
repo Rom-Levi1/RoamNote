@@ -35,4 +35,18 @@
     <string name="signup_txt_full_name">Full Name</string>
     <string name="signup_txt_have_account">Already have an Account? Login Here</string>
     <string name="login_txt_login_your_account">Login to your Account</string>
+    <string name="main_back_button">main_back_button</string>
+    <string name="title_Forum">Forum</string>
+    <string name="title_trips">Trips</string>
+    <string name="title_day_log">Daily Log</string>
+    <string name="title_map">Map</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="log_add">ADD</string>
+    <string name="Forum_title">Forum</string>
+    <string name="forum_new_post">New Post</string>
+    <string name="item_forum_time">2 hours ago</string>
+    <string name="item_forum_title">Post Title</string>
+    <string name="item_forum_author">Author</string>
+    <string name="item_forum_description">Post content here...</string>
 </resources>

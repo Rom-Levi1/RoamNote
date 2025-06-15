@@ -4,7 +4,9 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="?attr/actionBarSize">
+    android:fitsSystemWindows="true"
+    >
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
@@ -16,8 +18,26 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
+        app:itemIconTint="@color/Bagy_blue"
+        app:itemTextColor="@color/Bagy_blue"
+        app:menu="@menu/bottom_nav_menu"
+        app:labelVisibilityMode="labeled"
+        />
 
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/main_arrow_back"
+        android:layout_width="@dimen/app_name_size"
+        android:layout_height="@dimen/app_name_size"
+        app:srcCompat="@drawable/outline_arrow_back"
+        android:contentDescription="@string/main_back_button"
+        android:tint="@color/Bagy_blue"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="16dp"
+        />
     <fragment
         android:id="@+id/nav_host_fragment_activity_main"
         android:name="androidx.navigation.fragment.NavHostFragment"
@@ -29,5 +49,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/mobile_navigation" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

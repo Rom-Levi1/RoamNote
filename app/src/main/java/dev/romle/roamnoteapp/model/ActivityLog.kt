@@ -1,9 +1,8 @@
 package dev.romle.roamnoteapp.model
 
-data class Activity private constructor(
+data class ActivityLog private constructor(
     val name: String,
-    val latitude: Double,
-    val longitude: Double,
+    val location: Location,
     val cost: Double,
     val tags: List<String>,
     val satisfaction: Int,
@@ -11,23 +10,23 @@ data class Activity private constructor(
 ){
     class Builder(
         var name:String = "",
-        var latitude: Double = 0.0,
-        var longitude: Double = 0.0,
+        var location: Location.Builder = Location.Builder(),
         var cost: Double = 0.0,
         var tags: List<String> = listOf(),
         var satisfaction: Int = 5,
         var note: String? = null
     ){
         fun name(name: String) = apply{this.name = name}
-        fun latitude(lat: Double) = apply{this.latitude = lat}
-        fun longitude(lon: Double) = apply{this.longitude = lon}
+        fun location(lat: Double, lon: Double) = apply {
+            this.location = Location.Builder().latitude(lat).longitude(lon)
+        }
         fun cost(cost: Double) = apply{this.cost = cost}
         fun tags(tags: List<String>) = apply { this.tags = tags }
         fun satisfaction(sat:Int) = apply { this.satisfaction = sat }
         fun note(note:String?) = apply { this.note = note }
 
-        fun build() = Activity(
-            name, latitude, longitude, cost, tags, satisfaction, note
+        fun build() = ActivityLog(
+            name, location.build(), cost, tags, satisfaction, note
         )
     }
 }
