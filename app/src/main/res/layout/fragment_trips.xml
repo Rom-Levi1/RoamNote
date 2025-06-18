@@ -46,6 +46,7 @@
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/trips_BTN_add_trip"
             android:layout_width="match_parent"
             android:layout_height="@dimen/zero_margin"
             android:layout_margin="@dimen/logo_margin"

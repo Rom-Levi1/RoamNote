@@ -42,6 +42,7 @@
     <string name="title_map">Map</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="log_select_trip">Select Trip</string>
     <string name="log_add">ADD</string>
     <string name="Forum_title">Forum</string>
     <string name="forum_new_post">New Post</string>
@@ -49,4 +50,8 @@
     <string name="item_forum_title">Post Title</string>
     <string name="item_forum_author">Author</string>
     <string name="item_forum_description">Post content here...</string>
+    <string name="add_trip_title">Add New Trip</string>
+    <string name="add_trip_trip_name">Trip Name</string>
+    <string name="trips_save">Save</string>
+    <string name="log_date_date">01/01/2000</string>
 </resources>

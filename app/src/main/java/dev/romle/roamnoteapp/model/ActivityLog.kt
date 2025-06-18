@@ -1,6 +1,6 @@
 package dev.romle.roamnoteapp.model
 
-data class ActivityLog private constructor(
+data class ActivityLog (
     val name: String,
     val location: Location,
     val cost: Double,

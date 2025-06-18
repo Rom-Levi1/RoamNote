@@ -58,11 +58,17 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    //Glide
+    implementation(libs.glide)
+
     implementation(libs.google.maps)
     // Import the Firebase BoM
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
 
+    //Realtime Database
+    implementation(libs.firebase.database)
+    //Firebase Auth
     implementation(libs.firebase.auth)
 
 }

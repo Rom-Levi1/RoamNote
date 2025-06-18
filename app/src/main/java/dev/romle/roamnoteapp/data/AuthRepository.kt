@@ -1,4 +1,4 @@
-package dev.romle.roamnoteapp.ui
+package dev.romle.roamnoteapp.data
 
 import com.google.firebase.auth.FirebaseAuth
 import kotlin.coroutines.cancellation.CancellationException
@@ -64,6 +64,10 @@ class AuthRepository {
             println(tag + "login exception ${e.message}")
             return false
         }
+    }
+
+    fun getUid():String?{
+        return firebaseAuth.currentUser?.uid
     }
 
 

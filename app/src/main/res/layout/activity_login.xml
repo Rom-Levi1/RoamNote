@@ -88,6 +88,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/Bagy_blue"
         android:layout_marginTop="@dimen/logo_margin"
+        android:layout_marginHorizontal="@dimen/logo_margin"
         android:text="@string/login_txt_log_in"
         />
 

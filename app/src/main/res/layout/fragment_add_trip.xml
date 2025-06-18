@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".ui.AddTripFragment"
+    android:orientation="vertical">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/add_trip_LBL_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_trip_title"
+        android:textStyle="bold"
+        android:textSize="@dimen/trips_title_size"
+        android:textColor="@color/Bagy_blue"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/login_title_margin"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/add_trip_selector"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/edit_text_box"
+            android:padding="@dimen/log_padding"
+            android:layout_marginHorizontal="@dimen/logo_margin"
+            android:layout_marginBottom="@dimen/log_button_b_margin"
+            android:layout_weight="10"
+            android:layout_gravity="center_vertical"
+            android:clickable="true"
+            android:focusable="true">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/add_trip_TXT_tip_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/add_trip_trip_name"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="@dimen/log_button_size"
+                />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:gravity="center"
+            >
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/add_trip_IMG_photo"
+                android:layout_width="@dimen/log_loc_photo_dimen"
+                android:layout_height="@dimen/log_loc_photo_dimen"
+                android:src="@drawable/outline_add_a_photo_24"
+                android:contextClickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="@color/Bagy_blue"
+                />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/add_trip_TXT_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/log_add_photo"
+                android:textStyle="bold"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/log_button_size"
+                />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/add_trip_BTN_save"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/zero_margin"
+        android:layout_margin="@dimen/logo_margin"
+        android:backgroundTint="@color/Bagy_orange"
+        android:textColor="@color/white"
+        android:text="@string/trips_save"
+        android:layout_weight="1"
+        android:layout_marginTop="@dimen/trips_add_trips_top_margin"
+        />
+
+</LinearLayout>

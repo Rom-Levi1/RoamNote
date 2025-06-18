@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import dev.romle.roamnoteapp.data.AuthRepository
 import dev.romle.roamnoteapp.R
 import dev.romle.roamnoteapp.databinding.ActivitySignUpBinding
 import kotlinx.coroutines.launch
