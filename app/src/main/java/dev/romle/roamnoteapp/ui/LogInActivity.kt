@@ -11,12 +11,15 @@ import androidx.lifecycle.lifecycleScope
 import dev.romle.roamnoteapp.data.AuthRepository
 import dev.romle.roamnoteapp.R
 import dev.romle.roamnoteapp.databinding.ActivityLoginBinding
+import dev.romle.roamnoteapp.model.SessionManager
+import dev.romle.roamnoteapp.model.User
 import kotlinx.coroutines.launch
 
 class LogInActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private val authRepository = AuthRepository()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +40,16 @@ class LogInActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 val success = authRepository.login(email, password)
                 if (success) {
-                    // Navigate to main/home screen
+
+                    val currentUser = authRepository.getCurrentUser()
+                    val user = User.Builder()
+                        .uid(currentUser?.uid!!)
+                        .mail(currentUser.email ?: "")
+                        .build()
+
+                    SessionManager.currentUser = user
+
+                    // Navigate to menu screen
                     Toast.makeText(this@LogInActivity, "Login successful", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this@LogInActivity, MenuActivity::class.java))
                     finish()
@@ -52,4 +64,5 @@ class LogInActivity : AppCompatActivity() {
             startActivity(Intent(this, SignUpActivity::class.java))
         }
     }
+
 }

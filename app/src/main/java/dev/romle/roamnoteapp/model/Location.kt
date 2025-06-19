@@ -1,9 +1,11 @@
 package dev.romle.roamnoteapp.model
 
-data class Location private constructor(
+import java.io.Serializable
+
+data class Location (
     val latitude: Double,
     val longitude: Double
-){
+): Serializable {
     class Builder(
         var latitude: Double = 0.0,
         var longitude: Double = 0.0

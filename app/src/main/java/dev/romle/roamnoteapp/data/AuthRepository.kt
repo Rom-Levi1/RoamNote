@@ -1,6 +1,7 @@
 package dev.romle.roamnoteapp.data
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -68,6 +69,10 @@ class AuthRepository {
 
     fun getUid():String?{
         return firebaseAuth.currentUser?.uid
+    }
+
+    fun getCurrentUser(): FirebaseUser? {
+        return firebaseAuth.currentUser
     }
 
 

@@ -6,27 +6,27 @@ data class DayLog(
     val tripName: String,
     val date: Long,
     val hotel: Hotel?,
-    val activities: MutableList<ActivityLog>,
-    val expenses: MutableList<Expense>,
+    val activities: Map<String, ActivityLog>,
+    val expenses: Map<String, Expense>,
     val logCost: Double
 ) {
     class Builder(
         var tripName: String = "",
         var date: Long = System.currentTimeMillis(),
         var hotel: Hotel? = null,
-        var activities: MutableList<ActivityLog> = mutableListOf(),
-        var expenses: MutableList<Expense> = mutableListOf()
+        var expenses: MutableMap<String, Expense> = mutableMapOf(),
+        var activities: MutableMap<String, ActivityLog> = mutableMapOf()
     ) {
         fun date(date: Date) = apply { this.date = date.time }
         fun hotel(hotel: Hotel?) = apply { this.hotel = hotel }
-        fun addActivity(activity: ActivityLog) = apply { this.activities.add(activity) }
-        fun addExpense(expense: Expense) = apply { this.expenses.add(expense) }
+        fun addActivity(id: String,activity: ActivityLog) = apply { this.activities[id] = activity }
+        fun addExpense(id: String,expense: Expense) = apply { this.expenses[id] = expense }
         fun tripName(name: String) = apply { this.tripName = name }
 
         fun build(): DayLog {
-            val expensesCost = expenses.sumOf { it.cost }
+            val expensesCost = expenses.values.sumOf { it.cost }
             val hotelCost = hotel?.cost ?: 0.0
-            val activitiesCost = activities.sumOf { it.cost }
+            val activitiesCost = activities.values.sumOf { it.cost }
             val totalCost = expensesCost + hotelCost + activitiesCost
             return DayLog(tripName, date, hotel, activities, expenses, totalCost)
         }

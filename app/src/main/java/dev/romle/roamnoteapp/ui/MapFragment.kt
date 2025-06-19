@@ -35,11 +35,7 @@ class MapFragment : Fragment() {
         _binding = FragmentMapBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
 
-        mapFragment.getMapAsync{ gmap ->
-            googleMap = gmap
-        }
 
         return root
     }
@@ -51,6 +47,16 @@ class MapFragment : Fragment() {
             it.clear()
             it.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 12f)) //zooming
             it.addMarker(MarkerOptions().position(pos).title(name))
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
+
+        mapFragment.getMapAsync{ gmap ->
+            googleMap = gmap
         }
     }
 

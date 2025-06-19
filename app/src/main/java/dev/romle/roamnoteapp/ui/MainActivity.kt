@@ -24,16 +24,15 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
 
-
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_trips,
-                R.id.navigation_day_log,
-                R.id.navigation_map,
-                R.id.navigation_Forum
-            )
-        )
         navView.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.navigation_map) {
+                binding.mainArrowBack.visibility = android.view.View.GONE
+            } else {
+                binding.mainArrowBack.visibility = android.view.View.VISIBLE
+            }
+        }
 
         initViews()
 
@@ -41,6 +40,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
+
+
         binding.mainArrowBack.setOnClickListener{
             startActivity(Intent(this,MenuActivity::class.java))
             finish()

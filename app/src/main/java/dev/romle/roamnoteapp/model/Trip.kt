@@ -31,4 +31,7 @@ data class Trip (
 
         fun build() = Trip(name, locations, startDate, lastDate, dayLogs, photoUrl, cost)
     }
+
+    constructor() : this("", mutableListOf(), 0L, 0L, mutableListOf(), null, 0.0)
+
 }

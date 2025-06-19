@@ -6,4 +6,6 @@
     <color name="Bagy_blue">#0C5C60</color>
     <color name="text_color">#0C5C60</color>
     <color name="gray">#CCCCCC</color>
+    <color name="rating_first">#FFEE58</color>
+    <color name="rating_second">#FFCA28</color>
 </resources>

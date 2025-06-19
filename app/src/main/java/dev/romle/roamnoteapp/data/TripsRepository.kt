@@ -5,6 +5,7 @@ import com.google.firebase.database.FirebaseDatabase
 import dev.romle.roamnoteapp.model.ActivityLog
 import dev.romle.roamnoteapp.model.DayLog
 import dev.romle.roamnoteapp.model.Expense
+import dev.romle.roamnoteapp.model.SessionManager
 import dev.romle.roamnoteapp.model.Trip
 import java.text.SimpleDateFormat
 import java.util.*
@@ -17,27 +18,36 @@ class TripsRepository {
 
 
     fun addTrip(trip: Trip) {
-        val tripId = tripsRef.push().key
-        if (tripId == null) {
-            Log.e("TripsRepository", "Failed to generate trip ID")
-            return
-        }
 
-        tripsRef.child(tripId).setValue(trip)
-            .addOnSuccessListener {
-                Log.d("TripsRepository", "Trip saved!")
+        val safeTripName = trip.name.replace(".", "_")
+
+        tripsRef.child(safeTripName).get()
+            .addOnSuccessListener { snapshot ->
+                if (snapshot.exists()) {
+                    Log.d("TripsRepository", "Trip '${trip.name}' already exists! ")
+                }
+
+                else {
+                    tripsRef.child(safeTripName).setValue(trip)
+                        .addOnSuccessListener {
+                            Log.d("TripsRepository", "Trip '${trip.name}' saved!")
+                        }
+                        .addOnFailureListener {
+                            Log.e("TripsRepository", "Failed to save trip", it)
+                        }
+                }
             }
             .addOnFailureListener {
-                Log.e("TripsRepository", "Failed to save trip", it)
+                Log.e("TripsRepository", "Failed to check if trip exists", it)
             }
     }
 
-    fun addOrUpdateDailyLog(tripId: String, log: DayLog) {
+    fun addOrUpdateDailyLog(tripName: String, log: DayLog) {
 
         val dateId = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(log.date))
 
-        val dayLogsRef = tripsRef.child(tripId).child("dayLogs")
-        val tripRef = tripsRef.child(tripId)
+        val dayLogsRef = tripsRef.child(tripName).child("dayLogs")
+        val tripRef = tripsRef.child(tripName)
 
         dayLogsRef.child(dateId).setValue(log)
             .addOnSuccessListener {
@@ -65,13 +75,13 @@ class TripsRepository {
         }
     }
 
-    fun addActivity(tripId: String, logDate: Long, activity: ActivityLog) {
+    fun addActivity(tripName: String, logDate: Long, activity: ActivityLog) {
 
         val dateId = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(logDate))
         val activityId = UUID.randomUUID().toString()
 
         val activitiesRef = tripsRef
-            .child(tripId)
+            .child(tripName)
             .child("dayLogs")
             .child(dateId)
             .child("activities")
@@ -87,11 +97,11 @@ class TripsRepository {
 
     }
 
-    fun deleteActivity(tripId: String, logDate: Long, activityId: String) {
+    fun deleteActivity(tripName: String, logDate: Long, activityId: String) {
         val dateId = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(logDate))
 
         val activityRef = tripsRef
-            .child(tripId)
+            .child(tripName)
             .child("dayLogs")
             .child(dateId)
             .child("activities")
@@ -106,12 +116,12 @@ class TripsRepository {
             }
     }
 
-    fun addExpense(tripId: String, logDate: Long,expense: Expense){
+    fun addExpense(tripName: String, logDate: Long,expense: Expense){
         val dateId = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault()).format(Date(logDate))
         val expenseId = UUID.randomUUID().toString()
 
         val expenseRef = tripsRef
-            .child(tripId)
+            .child(tripName)
             .child("dayLogs")
             .child(dateId)
             .child("expenses")
@@ -125,11 +135,11 @@ class TripsRepository {
             }
     }
 
-    fun deleteExpense(tripId: String, logDate: Long, expenseId: String) {
+    fun deleteExpense(tripName: String, logDate: Long, expenseId: String) {
         val dateId = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(logDate))
 
         val expenseRef = tripsRef
-            .child(tripId)
+            .child(tripName)
             .child("dayLogs")
             .child(dateId)
             .child("expenses")
@@ -144,4 +154,24 @@ class TripsRepository {
             }
     }
 
+    fun loadTrips(callback: (List<Trip>) -> Unit){
+        tripsRef.get()
+            .addOnSuccessListener { snapshot ->
+                val trips = mutableListOf<Trip>()
+                for (tripSnap in snapshot.children) {
+                    val trip = tripSnap.getValue(Trip::class.java)
+                    if (trip != null) {
+                        trips.add(trip)
+                    }
+                }
+                SessionManager.currentUser = SessionManager.currentUser?.copy(trips = trips.toMutableList())
+
+                callback(trips)
+            }
+            .addOnFailureListener { error ->
+                Log.e("TripsRepository", "Failed to load trips", error)
+                callback(emptyList()) // or handle error differently
+            }
+    }
 }
+

@@ -1,14 +1,12 @@
-package dev.romle.roamnoteapp.ui
+package dev.romle.roamnoteapp.ui.dialogfragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
-import dev.romle.roamnoteapp.R
 import dev.romle.roamnoteapp.databinding.FragmentAddTripBinding
-import dev.romle.roamnoteapp.databinding.FragmentDailyLogBinding
 
 
 class AddTripFragment : DialogFragment() {
@@ -26,7 +24,7 @@ class AddTripFragment : DialogFragment() {
         _binding = FragmentAddTripBinding.inflate(layoutInflater)
         val root: View = binding.root
 
-        initViews()
+        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
 
         return root
     }
@@ -46,6 +44,17 @@ class AddTripFragment : DialogFragment() {
             dismiss()
 
         }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initViews()
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

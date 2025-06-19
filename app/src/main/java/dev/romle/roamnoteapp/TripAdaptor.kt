@@ -1,14 +1,16 @@
 package dev.romle.roamnoteapp
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import dev.romle.roamnoteapp.databinding.TripItemBinding
 import dev.romle.roamnoteapp.model.Trip
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TripAdapter(private val trips: MutableList<Trip>) :
+class TripAdapter(private val context: Context,private val trips: MutableList<Trip>) :
     RecyclerView.Adapter<TripAdapter.TripViewHolder>() {
 
     class TripViewHolder(val binding: TripItemBinding) : RecyclerView.ViewHolder(binding.root)
@@ -39,6 +41,11 @@ class TripAdapter(private val trips: MutableList<Trip>) :
     override fun getItemCount(): Int = trips.size
 
     fun addTrip(trip: Trip) {
+        if (trips.any { it.name == trip.name }){
+            Toast.makeText(context, "Trip already exists!", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         trips.add(trip)
         notifyItemInserted(trips.size - 1)
     }

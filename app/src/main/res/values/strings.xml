@@ -16,12 +16,12 @@
     <string name="trips_add_trip">Add a trip</string>
     <string name="daily_log_title">Daily Log</string>
     <string name="log_trip">Trip</string>
-    <string name="log_date">Date</string>
+    <string name="log_date">Date: </string>
     <string name="log_expenses">Expenses</string>
     <string name="log_add_expense">Add expense</string>
     <string name="log_add_activity">add activity</string>
     <string name="log_activities">Activities</string>
-    <string name="log_hotel">Hotel</string>
+    <string name="log_hotel">Hotel: </string>
     <string name="log_save">Save</string>
     <string name="log_add_photo">Add photo</string>
     <string name="log_add_location">Add location</string>
@@ -54,4 +54,15 @@
     <string name="add_trip_trip_name">Trip Name</string>
     <string name="trips_save">Save</string>
     <string name="log_date_date">01/01/2000</string>
+    <string name="log_hotel_name">Hotel name</string>
+    <string name="add_hotel_title">Add New Hotel</string>
+    <string name="add_hotel_hotel_name">Hotel name*</string>
+    <string name="add_hotel_cost">Cost in USD</string>
+    <string name="add_hotel_description">description (optional)</string>
+    <string name="add_expense_title">Add New Expense</string>
+    <string name="add_expense_name">Expense for</string>
+    <string name="add_activity_title">Add New Activity</string>
+    <string name="add_activity_name">Activity title</string>
+    <string name="add_activity_cost">Cost in USD</string>
+    <string name="add_activity_note">Note(optional)</string>
 </resources>

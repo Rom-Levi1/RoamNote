@@ -1,17 +1,19 @@
 package dev.romle.roamnoteapp.model
 
-data class Expense private constructor(
+import java.io.Serializable
+
+data class Expense (
     val name: String,
-    val tags: List<String>,
+    val tags: List<ExpenseTag>,
     val cost: Double,
-) {
+): Serializable {
     class Builder(
         var name: String = "",
-        var tags: List<String> = listOf(),
+        var tags: List<ExpenseTag> = listOf(),
         var cost: Double = 0.0
     ){
         fun name(name: String) = apply { this.name = name }
-        fun tags(tags: List<String>) = apply { this.tags = tags }
+        fun tags(tags: List<ExpenseTag>) = apply { this.tags = tags }
         fun cost(cost: Double) = apply{this.cost = cost}
 
         fun build() = Expense(

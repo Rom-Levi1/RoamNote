@@ -51,11 +51,9 @@
             <Spinner
                 android:id="@+id/trip_selector_spinner"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:spinnerMode="dropdown"
                 android:background="@android:drawable/btn_dropdown"
-
                 android:padding="8dp"
                 android:textAlignment="center"/>
 
@@ -75,41 +73,41 @@
             android:clickable="true"
             android:focusable="true">
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/date_selector_text"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/log_date"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:textSize="@dimen/log_button_size"
-                android:layout_gravity="center_vertical"
-                />
+                android:layout_weight="1">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/date_selector_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/log_date"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/log_button_size" />
+            </LinearLayout>
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/date_selector_date"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/log_date_date"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:textSize="@dimen/log_button_size"
-                android:layout_gravity="center_vertical"
-                />
-
+                android:layout_weight="1">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/date_selector_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/log_date_date"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/log_button_size" />
+            </LinearLayout>
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/log_IMG_calendar"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/calendar_blank"
-                android:contextClickable="true"
-                android:focusable="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:tint="@color/Bagy_blue"
-                />
+                android:tint="@color/Bagy_blue" />
 
         </LinearLayout>
 
@@ -125,32 +123,43 @@
             android:clickable="true"
             android:focusable="true">
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/hotel_selector_text"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/log_hotel"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:textSize="@dimen/log_button_size"
-                />
+                android:layout_weight="1">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/hotel_selector_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/log_hotel"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/log_button_size" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/hotel_selector_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/log_hotel_name"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/log_button_size" />
+            </LinearLayout>
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/add_hotel_selector_text"
+                android:id="@+id/log_add_hotel_selector_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/log_add"
                 android:textColor="@color/Bagy_blue"
                 android:textStyle="bold"
                 android:textSize="@dimen/log_button_size"
-                android:gravity="end"
-                android:layout_marginEnd="@dimen/logo_margin"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:tint="@color/Bagy_blue"
-                />
+                android:background="?attr/selectableItemBackgroundBorderless" />
 
         </LinearLayout>
 
@@ -182,7 +191,14 @@
                 android:layout_marginVertical="@dimen/login_linew_margin"/>
 
 
+            <LinearLayout
+                android:id="@+id/expense_list_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
             <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/log_expense_BTN_add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/log_add_expense"
@@ -191,10 +207,7 @@
                 android:textSize="@dimen/log_button_size"
                 android:textStyle="bold"
                 android:clickable="true"
-                android:focusable="true"
-                />
-
-
+                android:focusable="true" />
 
         </LinearLayout>
 
@@ -317,12 +330,11 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/log_BTN_save"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/zero_margin"
+            android:layout_height="wrap_content"
             android:layout_margin="@dimen/logo_margin"
             android:backgroundTint="@color/Bagy_orange"
             android:textColor="@color/white"
             android:text="@string/trips_save"
-            android:layout_weight="1"
             android:layout_marginTop="@dimen/trips_add_trips_top_margin"
             />
 
