@@ -72,4 +72,8 @@ dependencies {
     //Firebase Auth
     implementation(libs.firebase.auth)
 
+    //storage
+    implementation(libs.firebase.storage)
+
+
 }

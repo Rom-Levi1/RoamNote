@@ -65,4 +65,5 @@
     <string name="add_activity_name">Activity title</string>
     <string name="add_activity_cost">Cost in USD</string>
     <string name="add_activity_note">Note(optional)</string>
+    <string name="log_out">Log out</string>
 </resources>

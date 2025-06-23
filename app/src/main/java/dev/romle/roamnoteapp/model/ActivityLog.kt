@@ -17,7 +17,7 @@ data class ActivityLog (
         var tags: List<ActivityTag> = listOf(),
         var satisfaction: Int = 5,
         var note: String? = null
-    ){
+    ): Serializable{
         fun name(name: String) = apply{this.name = name}
         fun location(lat: Double, lon: Double) = apply {
             this.location = Location.Builder().latitude(lat).longitude(lon)
@@ -31,4 +31,13 @@ data class ActivityLog (
             name, location.build(), cost, tags, satisfaction, note
         )
     }
+
+    constructor() : this(
+        name = "",
+        location = Location(),
+        cost = 0.0,
+        tags = listOf(),
+        satisfaction = 0,
+        note = null
+    )
 }

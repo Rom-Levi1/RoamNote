@@ -46,6 +46,11 @@
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textSize="@dimen/log_button_size"
+                android:inputType="textCapWords|textNoSuggestions"
+                android:breakStrategy="simple"
+                android:ellipsize="none"
+                android:maxLines="2"
+                android:minEms="10"
                 />
 
 

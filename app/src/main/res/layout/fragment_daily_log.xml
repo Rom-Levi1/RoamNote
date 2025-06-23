@@ -141,6 +141,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
+
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/hotel_selector_name"
                     android:layout_width="wrap_content"
@@ -149,6 +150,7 @@
                     android:textStyle="bold"
                     android:textColor="@color/black"
                     android:textSize="@dimen/log_button_size" />
+
             </LinearLayout>
 
             <com.google.android.material.textview.MaterialTextView
@@ -239,6 +241,12 @@
                 android:background="@color/gray"
                 android:layout_marginVertical="@dimen/login_linew_margin"/>
 
+            <LinearLayout
+                android:id="@+id/activities_list_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/log_TXT_activity_add"
@@ -263,35 +271,7 @@
             android:orientation="horizontal"
             >
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/log_IMG_location"
-                    android:layout_width="@dimen/log_loc_photo_dimen"
-                    android:layout_height="@dimen/log_loc_photo_dimen"
-                    android:src="@drawable/outline_add_location_24"
-                    android:contextClickable="true"
-                    android:focusable="true"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:tint="@color/Bagy_blue"
-                    />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/log_TXT_location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/log_add_location"
-                    android:textColor="@color/text_color"
-                    android:textSize="@dimen/log_button_size"
-                    android:textStyle="bold"
-                    />
-
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -300,6 +280,12 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 >
+
+                <LinearLayout
+                    android:id="@+id/log_image_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"/>
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/log_IMG_photo"

@@ -120,7 +120,7 @@
             tools:rating="5"
             android:progressTint="@color/rating_first"
             android:secondaryProgressTint="@color/rating_second"
-            android:isIndicator="true"
+            android:isIndicator="false"
             android:layout_gravity="center_vertical"
             />
 

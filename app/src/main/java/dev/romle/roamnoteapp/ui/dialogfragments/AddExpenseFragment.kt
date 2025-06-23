@@ -87,6 +87,11 @@ class AddExpenseFragment : DialogFragment() {
                 binding.addExpenseTXTCost.error = "Please enter cost in USD"
                 return@setOnClickListener
             }
+            val parsedCost = cost.toDoubleOrNull()
+            if (parsedCost == null) {
+                binding.addExpenseTXTCost.error = "Enter a valid number"
+                return@setOnClickListener
+            }
 
             if (selectedTags.isEmpty()) {
                 Toast.makeText(requireContext(), "Please select at least one tag", Toast.LENGTH_SHORT).show()
@@ -96,7 +101,7 @@ class AddExpenseFragment : DialogFragment() {
             val expense = Expense(
                 name = name,
                 tags = selectedTags,
-                cost = cost.toDouble()
+                cost = cost.toDoubleOrNull() ?: 0.0
             )
 
             val bundle = Bundle().apply {

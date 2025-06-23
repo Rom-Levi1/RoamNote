@@ -2,6 +2,7 @@ package dev.romle.roamnoteapp.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -9,7 +10,9 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import dev.romle.roamnoteapp.R
+import dev.romle.roamnoteapp.data.TripsRepository
 import dev.romle.roamnoteapp.databinding.ActivityMainBinding
+import dev.romle.roamnoteapp.model.SessionManager
 
 class MainActivity : AppCompatActivity() {
 

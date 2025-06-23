@@ -31,4 +31,12 @@ data class Hotel(
             name, rating, cost, location.build(), description
         )
     }
+
+    constructor() : this(
+        name = "",
+        rating = 0.0f,
+        cost = 0.0,
+        location = Location(),
+        description = null
+    )
 }

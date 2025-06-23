@@ -20,4 +20,10 @@ data class Expense (
             name, tags, cost
         )
     }
+
+    constructor() : this(
+        name = "",
+        tags = listOf(),
+        cost = 0.0
+    )
 }

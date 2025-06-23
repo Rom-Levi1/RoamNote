@@ -9,6 +9,21 @@
     android:padding="@dimen/logo_margin"
     tools:context=".ui.MenuActivity">
 
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/menu_txt_log_out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/log_out"
+        android:textColor="@color/Bagy_blue"
+        android:textStyle="bold"
+        android:clickable="true"
+        android:focusable="true"
+        android:textSize="@dimen/log_button_size"
+        android:layout_marginTop="@dimen/logo_margin"
+        android:layout_marginLeft="@dimen/logo_margin"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        />
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/Menu_logo_IMG"
         android:layout_width="@dimen/logo_dimen"

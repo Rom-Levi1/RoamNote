@@ -17,4 +17,7 @@ data class Location (
             latitude,longitude
         )
     }
+
+    constructor() : this(0.0, 0.0)
+
 }

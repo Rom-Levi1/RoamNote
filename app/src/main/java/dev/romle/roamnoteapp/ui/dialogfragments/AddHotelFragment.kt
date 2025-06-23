@@ -69,10 +69,17 @@ class AddHotelFragment : DialogFragment() {
             lat, lon ->
             hotelLat = lat
             hotelLon = lon
+
+            Toast.makeText(
+                requireContext(),
+                "Location saved!",
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
         binding.logIMGLocation.setOnClickListener {
             locationManager.requestLocationPermissions()
+
         }
 
         binding.addHotelBTNSave.setOnClickListener {
@@ -90,6 +97,12 @@ class AddHotelFragment : DialogFragment() {
 
             if (name.isEmpty()) {
                 binding.addHotelTXTHotelName.error = "Please enter hotel name"
+                return@setOnClickListener
+            }
+
+            val parsedCost = cost
+            if (parsedCost == null) {
+                binding.addHotelTXTCost.error = "Enter a valid number"
                 return@setOnClickListener
             }
 
