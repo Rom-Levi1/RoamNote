@@ -9,7 +9,13 @@
         android:id="@+id/navigation_trips"
         android:name="dev.romle.roamnoteapp.ui.TripsFragment"
         android:label="@string/title_trips"
-        tools:layout="@layout/fragment_trips" />
+        tools:layout="@layout/fragment_trips" >
+
+        <action
+            android:id="@+id/action_tripsFragment_to_tripOverviewFragment"
+            app:destination="@id/navigation_trip_overview" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_day_log"
@@ -28,5 +34,19 @@
         android:name="dev.romle.roamnoteapp.ui.ForumFragment"
         android:label="@string/title_Forum"
         tools:layout="@layout/fragment_forum" />
+
+    <fragment
+        android:id="@+id/navigation_trip_overview"
+        android:name="dev.romle.roamnoteapp.ui.TripOverviewFragment"
+        android:label="Trip Overview"
+        tools:layout="@layout/fragment_trip_overview">
+
+        <argument
+            android:name="tripId"
+            app:argType="string" />
+
+    </fragment>
+
+
 
 </navigation>

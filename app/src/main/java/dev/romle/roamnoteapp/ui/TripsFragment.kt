@@ -1,6 +1,7 @@
 package dev.romle.roamnoteapp.ui
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +12,7 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dev.romle.roamnoteapp.R
 import dev.romle.roamnoteapp.TripAdapter
@@ -21,6 +23,7 @@ import dev.romle.roamnoteapp.model.SessionManager
 import dev.romle.roamnoteapp.model.Trip
 import dev.romle.roamnoteapp.ui.dialogfragments.AddTripFragment
 import java.util.Date
+import java.util.UUID.randomUUID
 
 class TripsFragment : Fragment() {
 
@@ -73,7 +76,9 @@ class TripsFragment : Fragment() {
                 if (imageUri != null) {
                     MediaManager().uploadImage(requireContext(), imageUri,
                         onSuccess = { imageUrl ->
+                            val tripId = randomUUID().toString()
                             val newTrip = Trip.Builder()
+                                .id(tripId)
                                 .name(tripName)
                                 .photoUrl(imageUrl)
                                 .build()
@@ -87,7 +92,9 @@ class TripsFragment : Fragment() {
                         }
                     )
                 } else {
+                    val tripId = randomUUID().toString()
                     val newTrip = Trip.Builder()
+                        .id(tripId)
                         .name(tripName)
                         .build()
 
@@ -103,19 +110,17 @@ class TripsFragment : Fragment() {
             val originalName = bundle.getString("original_name")
             val imageUri: Uri? = bundle.getParcelable("trip_image_uri")
 
-            Toast.makeText(requireContext(), "values ${tripName} , ${originalName}, ${imageUri}", Toast.LENGTH_SHORT).show()
-
-
             if (tripName.isNullOrBlank() || originalName.isNullOrBlank()) return@setFragmentResultListener
 
             val originalTrip = tripList.find { it.name == originalName } ?: return@setFragmentResultListener
 
-            if (imageUri != null) {
+            if (imageUri != null ) {
                 MediaManager().uploadImage(requireContext(), imageUri,
                     onSuccess = { imageUrl ->
 
 
                         val updatedTrip = Trip.Builder()
+                            .id(originalTrip.id)
                             .name(tripName)
                             .photoUrl(imageUrl)
                             .startDate(Date(originalTrip.startDate))
@@ -127,12 +132,20 @@ class TripsFragment : Fragment() {
                             }
                             .build()
 
+
+                        Log.d("TripDebug", "Deleting old image: ${originalTrip.photoUrl}")
+
+                        if (originalTrip.photoUrl != null)
+                        {
+                            MediaManager().deleteImage(originalTrip.photoUrl)
+                        }
+
                         val index = SessionManager.currentUser?.trips?.indexOfFirst { it.name == originalTrip.name }
                         if (index != null && index != -1) {
                             SessionManager.currentUser?.trips?.set(index, updatedTrip)
                         }
                         tripAdapter.updateTrip(updatedTrip,originalTrip.name)
-                        repo.updateTrip(updatedTrip,originalTrip.name,originalTrip.photoUrl)
+                        repo.updateTrip(updatedTrip)
 
                         Toast.makeText(requireContext(), "Updated trip successfully", Toast.LENGTH_SHORT).show()
 
@@ -145,6 +158,7 @@ class TripsFragment : Fragment() {
 
             else{
                 val updatedTrip = Trip.Builder()
+                    .id(originalTrip.id)
                     .name(tripName)
                     .photoUrl(originalTrip.photoUrl)
                     .startDate(Date(originalTrip.startDate))
@@ -160,7 +174,10 @@ class TripsFragment : Fragment() {
                     SessionManager.currentUser?.trips?.set(index, updatedTrip)
                 }
                 tripAdapter.updateTrip(updatedTrip,originalTrip.name)
-                repo.updateTrip(updatedTrip,originalTrip.name,originalTrip.photoUrl)
+                repo.updateTrip(updatedTrip)
+
+                Toast.makeText(requireContext(), "Updated trip successfully", Toast.LENGTH_SHORT).show()
+
             }
 
         }
@@ -203,7 +220,7 @@ class TripsFragment : Fragment() {
                     true
                 }
                 R.id.menu_trip_info -> {
-                    //onOverviewTrip(trip)
+                    onOverviewTrip(trip.id)
                     true
                 }
 
@@ -225,6 +242,11 @@ class TripsFragment : Fragment() {
         popup.show()
     }
 
+    private fun onOverviewTrip(tripId: String) {
+        val action = TripsFragmentDirections.actionTripsFragmentToTripOverviewFragment(tripId)
+        findNavController().navigate(action)
+    }
+
     private fun onEditTrip(trip: Trip) {
         val bundle = Bundle().apply {
             putBoolean("is_edit", true)
@@ -243,15 +265,46 @@ class TripsFragment : Fragment() {
         SessionManager.currentUser?.trips?.remove(trip)
 
         deleteTripImages(trip)
-        repo.deleteTrip(trip.name)
+        repo.deleteTrip(trip)
         Toast.makeText(requireContext(), "Trip deleted", Toast.LENGTH_SHORT).show()
     }
 
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    override fun onResume() {
+        super.onResume()
+        updateTripsFromLogs()
+        reloadTripList()
     }
+
+    private fun updateTripsFromLogs() {
+        val user = SessionManager.currentUser ?: return
+
+        user.trips.forEachIndexed { index, trip ->
+            val logs = trip.dayLogs.values
+
+            val totalCost = logs.sumOf { it.logCost }
+
+            val earliestDate = logs.minOfOrNull { it.date } ?: trip.startDate
+            val latestDate = logs.maxOfOrNull { it.date } ?: trip.lastDate
+
+            val updatedTrip = trip.copy(
+                startDate = earliestDate,
+                cost = totalCost,
+                lastDate = latestDate
+            )
+
+            user.trips[index] = updatedTrip
+        }
+
+        SessionManager.currentUser = user
+    }
+
+    private fun reloadTripList() {
+        val updatedTrips = SessionManager.currentUser?.trips.orEmpty()
+        tripList.clear()
+        tripList.addAll(updatedTrips)
+        tripAdapter.notifyDataSetChanged()
+    }
+
 
     fun deleteTripImages(trip: Trip) {
         trip.dayLogs.values.forEach { log ->
@@ -259,5 +312,12 @@ class TripsFragment : Fragment() {
 
         }
         trip.photoUrl?.let { MediaManager().deleteImage(it) }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        parentFragmentManager.clearFragmentResultListener("add_trip_request")
+        parentFragmentManager.clearFragmentResultListener("edit_trip_request")
+        _binding = null
     }
 }

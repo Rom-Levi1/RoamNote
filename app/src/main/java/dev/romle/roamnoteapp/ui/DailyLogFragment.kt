@@ -20,6 +20,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textview.MaterialTextView
 import dev.romle.roamnoteapp.ImageLoader
 import dev.romle.roamnoteapp.R
@@ -35,6 +36,9 @@ import dev.romle.roamnoteapp.model.Trip
 import dev.romle.roamnoteapp.ui.dialogfragments.AddActivityFragment
 import dev.romle.roamnoteapp.ui.dialogfragments.AddExpenseFragment
 import dev.romle.roamnoteapp.ui.dialogfragments.AddHotelFragment
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -107,7 +111,7 @@ class DailyLogFragment : Fragment() {
                 dayLogBuilder.date(calendar.time)
 
                 selectedTrip?.let {
-                    loadDayLogIfExists(it.name, selectedDate)
+                    loadDayLogIfExists(it, selectedDate)
                 }
             }
         }
@@ -120,23 +124,48 @@ class DailyLogFragment : Fragment() {
 
         expenseDialogHandle { expense ->
             val expenseId = UUID.randomUUID().toString()
-            dayLogBuilder.addExpense(expenseId, expense)
+            val expenseWithId = expense.copy(id = expenseId)
 
-            val tripNameSafe = selectedTrip!!.name.replace(".", "_")
-            TripsRepository().addExpense(tripNameSafe, selectedDate,expenseId, expense)
+            dayLogBuilder.addExpense(expenseId, expenseWithId)
+            repo.addExpense(selectedTrip!!, selectedDate, expenseId, expenseWithId)
+            addExpenseRow(selectedTrip!!, selectedDate,expenseWithId)
 
-            addExpenseRow(tripNameSafe,selectedDate,expenseId, expense)
+            val dateKey = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date(selectedDate))
+            val updatedLogs = selectedTrip!!.dayLogs.toMutableMap()
+            val existingLog = updatedLogs[dateKey] ?: DayLog()
+
+            val updatedLog = existingLog.copy(
+                expenses = existingLog.expenses.toMutableMap().apply {
+                    put(expense.id, expense)
+                }
+            )
+
+            updatedLogs[dateKey] = updatedLog
+            selectedTrip = selectedTrip!!.copy(dayLogs = updatedLogs)
+            SessionManager.updateTrip(selectedTrip!!)
         }
 
         activityDialogHandle { activity ->
 
             val activityId = UUID.randomUUID().toString()
-            dayLogBuilder.addActivity(activityId, activity)
+            val activityWithId = activity.copy(id = activityId)
 
-            val tripNameSafe = selectedTrip!!.name.replace(".", "_")
-            TripsRepository().addActivity(tripNameSafe, selectedDate,activityId, activity)
+            dayLogBuilder.addActivity(activityId, activityWithId)
+            repo.addActivity(selectedTrip!!, selectedDate, activityId, activityWithId)
+            addActivityRow(selectedTrip!!, selectedDate,  activityWithId)
 
-            addActivityRow(tripNameSafe, selectedDate, activityId,activity)
+            val dateKey = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date(selectedDate))
+            val updatedLogs = selectedTrip!!.dayLogs.toMutableMap()
+            val existingLog = updatedLogs[dateKey]?.copy() ?: DayLog.Builder().tripName(selectedTrip!!.name).date(Date(selectedDate)).build()
+
+            val newActivity = existingLog.activities.toMutableMap().apply {
+                put(activityId, activity)
+            }
+            val updatedLog = existingLog.copy(activities = newActivity)
+
+            updatedLogs[dateKey] = updatedLog
+            selectedTrip = selectedTrip!!.copy(dayLogs = updatedLogs)
+            SessionManager.updateTrip(selectedTrip!!)
 
         }
 
@@ -154,12 +183,15 @@ class DailyLogFragment : Fragment() {
             }
 
             if (selectedImageUri != null) {
+                binding.logBTNSave.isEnabled = false
                 MediaManager().uploadImage(requireContext(), selectedImageUri!!,
                     onSuccess = { imageUrl ->
+                        binding.logBTNSave.isEnabled = true
                         dayLogBuilder.photoUrl(imageUrl)
                         saveDayLogToFirebase()
                     },
                     onFailure = {
+                        binding.logBTNSave.isEnabled = true
                         Toast.makeText(requireContext(), "Image upload failed", Toast.LENGTH_SHORT).show()
                     }
                 )
@@ -172,13 +204,15 @@ class DailyLogFragment : Fragment() {
     private fun saveDayLogToFirebase() {
         val finalLog = dayLogBuilder.build()
 
-        val dateKey = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(finalLog.date))
+        val dateKey = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date(finalLog.date))
         val updatedLogs = selectedTrip!!.dayLogs.toMutableMap()
         updatedLogs[dateKey] = finalLog
 
         selectedTrip = selectedTrip!!.copy(dayLogs = updatedLogs)
 
-        TripsRepository().addOrUpdateDailyLog(selectedTrip!!.name, finalLog)
+        SessionManager.updateTrip(selectedTrip!!)
+
+        repo.addOrUpdateDailyLog(selectedTrip!!, finalLog)
 
         Toast.makeText(requireContext(), "Day log saved successfully", Toast.LENGTH_SHORT).show()
     }
@@ -209,7 +243,7 @@ class DailyLogFragment : Fragment() {
                 dayLogBuilder.tripName(selectedTrip!!.name)
                 Log.d("TripSpinner", "Selected trip: ${selectedTrip!!.name}")
 
-                loadDayLogIfExists(selectedTrip!!.name, selectedDate)
+                loadDayLogIfExists(selectedTrip!!, selectedDate)
 
             }
 
@@ -270,12 +304,11 @@ class DailyLogFragment : Fragment() {
 
     }
 
-    private fun loadDayLogIfExists(tripName: String, dateMillis: Long) {
+    private fun loadDayLogIfExists(trip: Trip, dateMillis: Long) {
 
         resetLocalData()
-        val tripNameSafe = tripName.replace(".", "_")
 
-        TripsRepository().loadDayLog(tripNameSafe, dateMillis) { log ->
+        repo.loadDayLog(trip, dateMillis) { log ->
             if (log == null) {
                 resetLocalData()
                 Log.d("DailyLog", "No DayLog found")
@@ -284,39 +317,41 @@ class DailyLogFragment : Fragment() {
 
             Log.d("DailyLog", "Loaded DayLog: $log")
 
-            binding.expenseListContainer.removeAllViews()
-            binding.activitiesListContainer.removeAllViews()
+            lifecycleScope.launch {
+                withContext(Dispatchers.Default) {
+                    val activityPairs = log.activities.map { UUID.randomUUID().toString() to it.value }
+                    val expensePairs = log.expenses.map { UUID.randomUUID().toString() to it.value }
 
-            log.hotel?.let {
-                binding.hotelSelectorName.text = it.name
-                dayLogBuilder.hotel(it)
-            }
+                    log.hotel?.let { dayLogBuilder.hotel(it) }
+                    log.photoUrl?.let { dayLogBuilder.photoUrl(it) }
+                    activityPairs.forEach { (id, act) -> dayLogBuilder.addActivity(id, act) }
+                    expensePairs.forEach { (id, exp) -> dayLogBuilder.addExpense(id, exp) }
 
-            log.photoUrl?.let {
-                binding.logIMGPhoto.setImageResource(R.drawable.check_24px)
-                binding.logTXTPhoto.text = "Change photo"
-                selectedImageUri = null
-                dayLogBuilder.photoUrl(it)
-            }
+                    withContext(Dispatchers.Main) {
+                        binding.expenseListContainer.removeAllViews()
+                        binding.activitiesListContainer.removeAllViews()
 
-            log.expenses.values.forEach { expense ->
-                val id = UUID.randomUUID().toString()
-                dayLogBuilder.addExpense(id, expense)
-                addExpenseRow(tripNameSafe,dateMillis,id, expense)
-            }
+                        log.hotel?.let {
+                            binding.hotelSelectorName.text = it.name
+                        }
 
-            log.activities.values.forEach { activity ->
-                val id = UUID.randomUUID().toString()
-                dayLogBuilder.addActivity(id, activity)
-                addActivityRow(tripNameSafe,dateMillis,id, activity)
+                        log.photoUrl?.let {
+                            binding.logIMGPhoto.setImageResource(R.drawable.check_24px)
+                            binding.logTXTPhoto.text = "Change photo"
+                            selectedImageUri = null
+                        }
+
+                        activityPairs.forEach { (_, act) -> addActivityRow(trip, dateMillis,act) }
+                        expensePairs.forEach { (_, exp) -> addExpenseRow(trip, dateMillis,exp) }
+                    }
+                }
             }
         }
     }
 
-    private fun addActivityRow(tripName: String, logDate: Long, activityId: String, activity: ActivityLog) {
+    private fun addActivityRow(trip: Trip, logDate: Long, activity: ActivityLog) {
         val activityRow = LinearLayout(requireContext()).apply {
             orientation = LinearLayout.HORIZONTAL
-            tag = activityId
             layoutParams = LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
@@ -342,21 +377,17 @@ class DailyLogFragment : Fragment() {
             )
             setOnClickListener {
                 val parent = it.parent as? LinearLayout
-                val id = parent?.tag as? String
-                if (id != null) {
-
-                    AlertDialog.Builder(requireContext())
-                        .setTitle("Delete Trip")
-                        .setMessage("Are you sure you want to delete \"${activity.name}\"?")
-                        .setPositiveButton("Delete") { _, _ ->
-                            dayLogBuilder.removeActivity(id)
-                            repo.deleteActivity(tripName,logDate,id)
-                            binding.activitiesListContainer.removeView(parent)
-                        }
-                        .setNegativeButton("Cancel", null)
-                        .show()
-
-                }
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Delete Trip")
+                    .setMessage("Are you sure you want to delete \"${activity.name}\"?")
+                    .setPositiveButton("Delete") { _, _ ->
+                        dayLogBuilder.removeActivity(activity.id)
+                        Log.d("TripsRepo", "Expense ${activity.id} deleted from ${activity.id}!")
+                        repo.deleteActivity(trip,logDate,activity.id)
+                        binding.activitiesListContainer.removeView(parent)
+                    }
+                    .setNegativeButton("Cancel", null)
+                    .show()
             }
         }
 
@@ -367,7 +398,7 @@ class DailyLogFragment : Fragment() {
 
 
 
-    private fun addExpenseRow(tripName: String, logDate: Long, expenseId: String, expense: Expense) {
+    private fun addExpenseRow(trip: Trip, logDate: Long, expense: Expense) {
         val expenseRow = LinearLayout(requireContext()).apply {
             orientation = LinearLayout.HORIZONTAL
             layoutParams = LinearLayout.LayoutParams(
@@ -398,8 +429,8 @@ class DailyLogFragment : Fragment() {
                     .setTitle("Delete Trip")
                     .setMessage("Are you sure you want to delete \"${expense.name}\"?")
                     .setPositiveButton("Delete") { _, _ ->
-                        dayLogBuilder.removeExpense(expenseId)
-                        repo.deleteExpense(tripName,logDate,expenseId)
+                        dayLogBuilder.removeExpense(expense.id)
+                        repo.deleteExpense(trip,logDate,expense.id)
                         binding.expenseListContainer.removeView(expenseRow)
                     }
                     .setNegativeButton("Cancel", null)

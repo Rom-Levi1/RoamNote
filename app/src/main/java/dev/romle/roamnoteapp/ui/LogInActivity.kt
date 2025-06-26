@@ -13,7 +13,9 @@ import dev.romle.roamnoteapp.R
 import dev.romle.roamnoteapp.databinding.ActivityLoginBinding
 import dev.romle.roamnoteapp.model.SessionManager
 import dev.romle.roamnoteapp.model.User
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class LogInActivity : AppCompatActivity() {
 
@@ -38,22 +40,21 @@ class LogInActivity : AppCompatActivity() {
             val password = binding.passwordEditText.text.toString()
 
             lifecycleScope.launch {
-                val success = authRepository.login(email, password)
-                if (success) {
+                val (success, user) = withContext(Dispatchers.IO) {
+                    val result = authRepository.login(email, password)
+                    val currentUser = if (result) authRepository.getCurrentUser() else null
+                    result to currentUser
+                }
 
-                    val currentUser = authRepository.getCurrentUser()
-                    val user = User.Builder()
-                        .uid(currentUser?.uid!!)
-                        .mail(currentUser.email ?: "")
+                if (success && user != null) {
+                    SessionManager.currentUser = User.Builder()
+                        .uid(user.uid)
+                        .mail(user.email ?: "")
                         .build()
 
-                    SessionManager.currentUser = user
-
-                    // Navigate to menu screen
                     Toast.makeText(this@LogInActivity, "Login successful", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this@LogInActivity, MenuActivity::class.java))
                     finish()
-
                 } else {
                     Toast.makeText(this@LogInActivity, "Login failed", Toast.LENGTH_SHORT).show()
                 }

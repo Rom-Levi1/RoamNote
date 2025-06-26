@@ -84,7 +84,12 @@ class AddTripFragment : DialogFragment() {
             val result = Bundle().apply {
                 putString("trip_name", tripName)
                 putString("original_name", originalName)
-                selectedImageUri?.let { putParcelable("trip_image_uri", it) }
+                selectedImageUri?.let {
+                    val isRemote = it.toString().startsWith("https://firebasestorage")
+                    if (!isRemote) {
+                        putParcelable("trip_image_uri", it)
+                    }
+                }
             }
 
             if (isEdit) {

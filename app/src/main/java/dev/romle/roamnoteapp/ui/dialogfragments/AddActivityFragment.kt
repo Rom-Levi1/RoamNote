@@ -152,6 +152,7 @@ class AddActivityFragment : DialogFragment() {
 
 
             val newActivity = ActivityLog(
+                id = "",
                 name = name,
                 location = activityLocation,
                 cost = cost.toDouble(),

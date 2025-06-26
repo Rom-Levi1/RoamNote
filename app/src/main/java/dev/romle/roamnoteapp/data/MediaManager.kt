@@ -40,7 +40,6 @@ class MediaManager {
                     Log.d("Media Manager", "Deleted image successfully")
                 }
                 .addOnFailureListener { e ->
-                    // Failed to delete image (you can log it if needed)
                     Log.d("Media Manager", "Failed to delete image")
 
                 }

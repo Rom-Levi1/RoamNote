@@ -99,6 +99,7 @@ class AddExpenseFragment : DialogFragment() {
             }
 
             val expense = Expense(
+                id = "",
                 name = name,
                 tags = selectedTags,
                 cost = cost.toDoubleOrNull() ?: 0.0

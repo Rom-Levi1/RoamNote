@@ -6,7 +6,6 @@ enum class ActivityTag(val displayName: String){
     NATURE("Nature"),
     NIGHTLIFE("Nightlife"),
     HISTORIC("Historic"),
-    FOOD("Food"),
     OTHER("Other");
 
     override fun toString(): String = displayName

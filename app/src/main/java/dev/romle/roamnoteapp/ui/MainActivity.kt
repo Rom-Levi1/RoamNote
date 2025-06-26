@@ -27,8 +27,19 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
 
-        navView.setupWithNavController(navController)
-
+        navView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_trips,
+                R.id.navigation_day_log,
+                R.id.navigation_map,
+                R.id.navigation_Forum -> {
+                    navController.popBackStack(navController.graph.startDestinationId, false)
+                    navController.navigate(item.itemId)
+                    true
+                }
+                else -> false
+            }
+        }
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id == R.id.navigation_map) {
                 binding.mainArrowBack.visibility = android.view.View.GONE
@@ -45,10 +56,18 @@ class MainActivity : AppCompatActivity() {
     private fun initViews() {
 
 
-        binding.mainArrowBack.setOnClickListener{
-            startActivity(Intent(this,MenuActivity::class.java))
-            finish()
+        binding.mainArrowBack.setOnClickListener {
+            val navController = findNavController(R.id.nav_host_fragment_activity_main)
+            val currentDestId = navController.currentDestination?.id
+
+            if (currentDestId == R.id.navigation_trip_overview) {
+                navController.popBackStack(R.id.navigation_trips, false)
+            } else {
+                startActivity(Intent(this, MenuActivity::class.java))
+                finish()
+            }
         }
+
         val target = intent.getStringExtra("target_fragment")
         when (target) {
             "trips" -> binding.navView.selectedItemId = R.id.navigation_trips

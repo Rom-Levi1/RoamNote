@@ -34,6 +34,7 @@ class MenuActivity : AppCompatActivity() {
         initViews()
     }
 
+
     private fun goToMain(target: String) {
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra("target_fragment", target)

@@ -15,22 +15,19 @@ class TripsRepository {
 
     private val authRepo = AuthRepository()
     private val uid = authRepo.getUid()
-    private val tripsRef = FirebaseDatabase.getInstance().getReference("users").child(uid!!).child("trips")
-    private val mediaManager = MediaManager()
+    private val tripsRef =
+        FirebaseDatabase.getInstance().getReference("users").child(uid!!).child("trips")
 
 
     fun addTrip(trip: Trip) {
 
-        val safeTripName = trip.name.replace(".", "_")
 
-        tripsRef.child(safeTripName).get()
+        tripsRef.child(trip.id).get()
             .addOnSuccessListener { snapshot ->
                 if (snapshot.exists()) {
                     Log.d("TripsRepository", "Trip '${trip.name}' already exists! ")
-                }
-
-                else {
-                    tripsRef.child(safeTripName).setValue(trip)
+                } else {
+                    tripsRef.child(trip.id).setValue(trip)
                         .addOnSuccessListener {
                             Log.d("TripsRepository", "Trip '${trip.name}' saved!")
                         }
@@ -44,39 +41,33 @@ class TripsRepository {
             }
     }
 
-    fun updateTrip(updatedTrip: Trip,oldName: String, oldImage: String?) {
-        val safeTripName = updatedTrip.name.replace(".", "_")
+    fun updateTrip(updatedTrip: Trip) {
 
         val updates = mapOf(
-            "name" to safeTripName,
+            "name" to updatedTrip.name,
             "photoUrl" to updatedTrip.photoUrl
         )
 
-        tripsRef.child(oldName).updateChildren(updates)
-
-        if(oldImage != updatedTrip.photoUrl && oldImage != null){
-            mediaManager.deleteImage(oldImage)
-        }
+        tripsRef.child(updatedTrip.id).updateChildren(updates)
 
     }
 
-    fun deleteTrip(tripName: String) {
-        val safeTripName = tripName.replace(".", "_")
+    fun deleteTrip(trip: Trip) {
 
-        tripsRef.child(safeTripName).removeValue()
+        tripsRef.child(trip.id).removeValue()
             .addOnSuccessListener {
-                Log.d("TripsRepository", "Trip '$tripName' deleted!")
+                Log.d("TripsRepository", "Trip '${trip.name}' deleted!")
             }
             .addOnFailureListener {
-                Log.e("TripsRepository", "Failed to delete trip '$tripName'", it)
+                Log.e("TripsRepository", "Failed to delete trip '${trip.name}'", it)
             }
     }
 
-    fun addOrUpdateDailyLog(tripName: String, log: DayLog) {
-        val dateId = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(log.date))
+    fun addOrUpdateDailyLog(trip: Trip, log: DayLog) {
+        val dateId = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date(log.date))
 
-        val dayLogRef = tripsRef.child(tripName).child("dayLogs").child(dateId)
-        val tripRef = tripsRef.child(tripName)
+        val dayLogRef = tripsRef.child(trip.id).child("dayLogs").child(dateId)
+        val tripRef = tripsRef.child(trip.id)
 
         val updates = mapOf(
             "tripName" to log.tripName,
@@ -88,7 +79,7 @@ class TripsRepository {
 
         dayLogRef.updateChildren(updates)
             .addOnSuccessListener {
-                tripsRef.child(tripName).child("dayLogs").get().addOnSuccessListener { snapshot ->
+                tripsRef.child(trip.id).child("dayLogs").get().addOnSuccessListener { snapshot ->
                     val total = calculateTotalTripCost(snapshot.children)
                     var minDate = Long.MAX_VALUE
                     var maxDate = Long.MIN_VALUE
@@ -112,12 +103,12 @@ class TripsRepository {
     }
 
 
-    fun addActivity(tripName: String, logDate: Long,activityId: String, activity: ActivityLog) {
+    fun addActivity(trip: Trip, logDate: Long, activityId: String, activity: ActivityLog) {
 
-        val dateId = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(logDate))
+        val dateId = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date(logDate))
 
         val dayLogRef = tripsRef
-            .child(tripName)
+            .child(trip.id)
             .child("dayLogs")
             .child(dateId)
 
@@ -133,41 +124,48 @@ class TripsRepository {
                         val currentCost = costSnapshot.getValue(Double::class.java) ?: 0.0
                         val newCost = currentCost + activity.cost
 
-                        tripsRef.child(tripName).child("cost").setValue(newCost)
-                            .addOnSuccessListener {
-                                Log.d("TripsRepo", "Updated trip cost to $newCost")
-                            }
-                            .addOnFailureListener {
-                                Log.e("TripsRepo", "Failed to update trip Cost", it)
-                            }
-
                         dayLogRef.child("logCost").setValue(newCost)
                             .addOnSuccessListener {
                                 Log.d("TripsRepo", "Updated logCost to $newCost")
-                            }
-                            .addOnFailureListener {
-                                Log.e("TripsRepo", "Failed to update logCost", it)
+
+                                tripsRef.child(trip.id).child("cost").get()
+                                    .addOnSuccessListener { costSnapshot ->
+                                        val currentCost =
+                                            costSnapshot.getValue(Double::class.java) ?: 0.0
+                                        val newCost = currentCost + activity.cost
+                                        tripsRef.child(trip.id).child("cost").setValue(newCost)
+                                            .addOnSuccessListener {
+                                                Log.d("TripsRepo", "Updated trip cost to $newCost")
+                                            }
+                                            .addOnFailureListener {
+                                                Log.e("TripsRepo", "Failed to update trip Cost", it)
+                                            }
+
+                                    }
+                                    .addOnFailureListener {
+                                        Log.e("TripsRepo", "Failed to update logCost", it)
+                                    }
                             }
                     }
-            }
-            .addOnFailureListener {
-                Log.e("TripsRepo", "Failed to add activity", it)
-            }
+                    .addOnFailureListener {
+                        Log.e("TripsRepo", "Failed to add activity", it)
+                    }
 
+            }
     }
 
-    fun deleteActivity(tripName: String, logDate: Long, activityId: String) {
-        val dateId = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(logDate))
+    fun deleteActivity(trip: Trip, logDate: Long, activityId: String) {
+        val dateId = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date(logDate))
 
         val dayLogRef = tripsRef
-            .child(tripName)
+            .child(trip.id)
             .child("dayLogs")
             .child(dateId)
 
         val activitiesRef = dayLogRef.child("activities")
 
         activitiesRef.child(activityId).get()
-            .addOnSuccessListener{ snapshot ->
+            .addOnSuccessListener { snapshot ->
                 val activity = snapshot.getValue(ActivityLog::class.java)
                 activitiesRef.child(activityId).removeValue()
                     .addOnSuccessListener {
@@ -175,124 +173,108 @@ class TripsRepository {
 
                         dayLogRef.child("logCost").get()
                             .addOnSuccessListener { costSnapshot ->
-                                val currentCost = costSnapshot.getValue(Double::class.java) ?: 0.0
+                                val currentCost =
+                                    costSnapshot.getValue(Double::class.java) ?: 0.0
                                 val newCost = currentCost - (activity?.cost ?: 0.0)
-
-                                tripsRef.child(tripName).child("cost").setValue(newCost)
-                                    .addOnSuccessListener {
-                                        Log.d("TripsRepo", "Updated trip cost to $newCost")
-                                    }
-                                    .addOnFailureListener {
-                                        Log.e("TripsRepo", "Failed to update trip Cost", it)
-                                    }
 
                                 dayLogRef.child("logCost").setValue(newCost)
                                     .addOnSuccessListener {
                                         Log.d("TripsRepo", "Updated logCost to $newCost")
+
+                                        tripsRef.child(trip.id).child("cost").get()
+                                            .addOnSuccessListener { costSnapshot ->
+                                                val currentCost =
+                                                    costSnapshot.getValue(Double::class.java)
+                                                        ?: 0.0
+                                                val newCost =
+                                                    currentCost - (activity?.cost ?: 0.0)
+
+                                                tripsRef.child(trip.id).child("cost")
+                                                    .setValue(newCost)
+                                                    .addOnSuccessListener {
+                                                        Log.d(
+                                                            "TripsRepo",
+                                                            "Updated trip cost to $newCost"
+                                                        )
+                                                    }
+                                                    .addOnFailureListener {
+                                                        Log.e(
+                                                            "TripsRepo",
+                                                            "Failed to update trip Cost",
+                                                            it
+                                                        )
+                                                    }
+
+                                            }
                                     }
                                     .addOnFailureListener {
                                         Log.e("TripsRepo", "Failed to update logCost", it)
                                     }
+
                             }
                     }
                     .addOnFailureListener {
                         Log.e("TripsRepo", " Failed to delete activity", it)
                     }
-        }
+            }
 
     }
 
-    fun addExpense(tripName: String, logDate: Long,expenseId: String,expense: Expense){
-        val dateId = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault()).format(Date(logDate))
-
-        val dayLogRef = tripsRef
-            .child(tripName)
-            .child("dayLogs")
-            .child(dateId)
-
+    fun addExpense(trip: Trip, logDate: Long, expenseId: String, expense: Expense) {
+        val dateId = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date(logDate))
+        val dayLogRef = tripsRef.child(trip.id).child("dayLogs").child(dateId)
         val expenseRef = dayLogRef.child("expenses")
 
         expenseRef.child(expenseId).setValue(expense)
             .addOnSuccessListener {
                 Log.d("TripsRepo", "Expense added to $dateId!")
 
-                dayLogRef.child("logCost").get()
-                    .addOnSuccessListener { costSnapshot ->
-                        val currentCost = costSnapshot.getValue(Double::class.java) ?: 0.0
-                        val newCost = currentCost + expense.cost
+                // Update day log cost
+                dayLogRef.child("logCost").get().addOnSuccessListener { logCostSnap ->
+                    val currentLogCost = logCostSnap.getValue(Double::class.java) ?: 0.0
+                    val newLogCost = currentLogCost + expense.cost
+                    dayLogRef.child("logCost").setValue(newLogCost)
+                }
 
-                        tripsRef.child(tripName).child("cost").setValue(newCost)
-                            .addOnSuccessListener {
-                                Log.d("TripsRepo", "Updated trip cost to $newCost")
-                            }
-                            .addOnFailureListener {
-                                Log.e("TripsRepo", "Failed to update trip Cost", it)
-                            }
-
-                        dayLogRef.child("logCost").setValue(newCost)
-                            .addOnSuccessListener {
-                                Log.d("TripsRepo", "Updated logCost to $newCost")
-                            }
-                            .addOnFailureListener {
-                                Log.e("TripsRepo", "Failed to update logCost", it)
-                            }
-                    }
-            }
-            .addOnFailureListener {
-                Log.e("TripsRepo", "Failed to add expense", it)
+                // Update trip cost
+                tripsRef.child(trip.id).child("cost").get().addOnSuccessListener { tripCostSnap ->
+                    val currentTripCost = tripCostSnap.getValue(Double::class.java) ?: 0.0
+                    val newTripCost = currentTripCost + expense.cost
+                    tripsRef.child(trip.id).child("cost").setValue(newTripCost)
+                }
             }
     }
 
-    fun deleteExpense(tripName: String, logDate: Long, expenseId: String) {
-        val dateId = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(logDate))
-
-        val dayLogRef = tripsRef
-            .child(tripName)
-            .child("dayLogs")
-            .child(dateId)
-
+    fun deleteExpense(trip: Trip, logDate: Long, expenseId: String) {
+        val dateId = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date(logDate))
+        val dayLogRef = tripsRef.child(trip.id).child("dayLogs").child(dateId)
         val expenseRef = dayLogRef.child("expenses")
 
-        expenseRef.child(expenseId).get()
-            .addOnSuccessListener { snapshot ->
-                val expense = snapshot.getValue(Expense::class.java)
+        expenseRef.child(expenseId).get().addOnSuccessListener { snapshot ->
+            val expense = snapshot.getValue(Expense::class.java)
+            if (expense == null) return@addOnSuccessListener
 
-                expenseRef.child(expenseId).removeValue()
-                    .addOnSuccessListener {
-                        Log.d("TripsRepo", "Expense $expenseId deleted from $dateId!")
+            expenseRef.child(expenseId).removeValue().addOnSuccessListener {
+                Log.d("TripsRepo", "Expense $expenseId deleted from $dateId!")
 
-                        dayLogRef.child("logCost").get()
-                            .addOnSuccessListener { costSnapshot ->
-                                val currentCost = costSnapshot.getValue(Double::class.java) ?: 0.0
-                                val newCost = currentCost - (expense?.cost ?: 0.0)
+                // Update day log cost
+                dayLogRef.child("logCost").get().addOnSuccessListener { logCostSnap ->
+                    val currentLogCost = logCostSnap.getValue(Double::class.java) ?: 0.0
+                    val newLogCost = currentLogCost - expense.cost
+                    dayLogRef.child("logCost").setValue(newLogCost)
+                }
 
-                                tripsRef.child(tripName).child("cost").setValue(newCost)
-                                    .addOnSuccessListener {
-                                        Log.d("TripsRepo", "Updated trip cost to $newCost")
-                                    }
-                                    .addOnFailureListener {
-                                        Log.e("TripsRepo", "Failed to update trip Cost", it)
-                                    }
-
-                                dayLogRef.child("logCost").setValue(newCost)
-                                    .addOnSuccessListener {
-                                        Log.d("TripsRepo", "Updated logCost to $newCost")
-                                    }
-                                    .addOnFailureListener {
-                                        Log.e("TripsRepo", "Failed to update logCost", it)
-                                    }
-                            }
-
-                    }
-                    .addOnFailureListener {
-                        Log.e("TripsRepo", "Failed to delete expense", it)
-                    }
+                // Update trip cost
+                tripsRef.child(trip.id).child("cost").get().addOnSuccessListener { tripCostSnap ->
+                    val currentTripCost = tripCostSnap.getValue(Double::class.java) ?: 0.0
+                    val newTripCost = currentTripCost - expense.cost
+                    tripsRef.child(trip.id).child("cost").setValue(newTripCost)
+                }
             }
-
-
+        }
     }
 
-    fun loadTrips(callback: (List<Trip>) -> Unit){
+    fun loadTrips(callback: (List<Trip>) -> Unit) {
         tripsRef.get()
             .addOnSuccessListener { snapshot ->
                 val trips = mutableListOf<Trip>()
@@ -302,7 +284,8 @@ class TripsRepository {
                         trips.add(trip)
                     }
                 }
-                SessionManager.currentUser = SessionManager.currentUser?.copy(trips = trips.toMutableList())
+                SessionManager.currentUser =
+                    SessionManager.currentUser?.copy(trips = trips.toMutableList())
 
                 callback(trips)
             }
@@ -312,12 +295,11 @@ class TripsRepository {
             }
     }
 
-    fun loadDayLog(tripName: String, logDate: Long, onLoaded: (DayLog?) -> Unit) {
-        val dateId = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(logDate))
-        val safeTripName = tripName.replace(".", "_")
+    fun loadDayLog(trip: Trip, logDate: Long, onLoaded: (DayLog?) -> Unit) {
+        val dateId = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date(logDate))
 
         val dayLogRef = tripsRef
-            .child(safeTripName)
+            .child(trip.id)
             .child("dayLogs")
             .child(dateId)
 
@@ -327,7 +309,7 @@ class TripsRepository {
                 onLoaded(log)
             }
             .addOnFailureListener {
-                Log.e("TripsRepo", "Failed to load DayLog for $safeTripName/$dateId", it)
+                Log.e("TripsRepo", "Failed to load DayLog for ${trip.name}/$dateId", it)
                 onLoaded(null)
             }
     }
@@ -343,6 +325,6 @@ class TripsRepository {
         return total
     }
 
-
 }
+
 

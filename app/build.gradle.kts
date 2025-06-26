@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.services)
     alias(libs.plugins.map.secret)
+    alias(libs.plugins.navigation.safeargs)
 
 }
 
@@ -58,6 +59,9 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation(libs.mpandroidchart)
+
 
     //Glide
     implementation(libs.glide)

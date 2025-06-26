@@ -16,9 +16,11 @@ googleMaps = "19.2.0"
 glide = "4.16.0"
 lifecycleLivedataKtx = "2.6.1"
 lifecycleViewmodelKtx = "2.6.1"
+mpandroidchart = "v3.1.0"
 navigationFragmentKtx = "2.6.0"
 navigationUiKtx = "2.6.0"
- playServicesLocation = "21.3.0"
+playServicesLocation = "21.3.0"
+navigationSafeargs = "2.6.0"
 
 
  [libraries]
@@ -41,7 +43,9 @@ androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifec
 androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
 google-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "googleMaps" }
- play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
+mpandroidchart = { module = "com.github.PhilJay:MPAndroidChart", version.ref = "mpandroidchart" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
+
 
 
 
@@ -50,4 +54,7 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 google-services = {  id = "com.google.gms.google-services", version.ref  = "gs" }
 map-secret = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "mapSecret" }
+navigation-safeargs = { id = "androidx.navigation.safeargs", version.ref = "navigationSafeargs" }
+
+
 
