@@ -15,9 +15,55 @@ class TripsRepository {
 
     private val authRepo = AuthRepository()
     private val uid = authRepo.getUid()
+    private val userRef =
+        FirebaseDatabase.getInstance().getReference("users").child(uid!!)
+    private val usersRef =
+        FirebaseDatabase.getInstance().getReference("users")
     private val tripsRef =
         FirebaseDatabase.getInstance().getReference("users").child(uid!!).child("trips")
 
+    fun addUsername(username: String){
+        userRef.child("username").setValue(username)
+            .addOnSuccessListener {
+                Log.d("TripsRepo", "Username saved successfully")
+            }
+            .addOnFailureListener{ error ->
+                Log.e("TripsRepo", "Failed to save username", error)
+            }
+    }
+
+    fun loadUsername() {
+        userRef.child("username").get()
+            .addOnSuccessListener { snapshot ->
+                val username = snapshot.getValue(String::class.java)
+                Log.d("TripsRepo", "Username loaded: $username")
+            }
+            .addOnFailureListener { error ->
+                Log.e("TripsRepo", "Failed to load username", error)
+            }
+    }
+
+
+    fun isUsernameAvailable(username: String, onResult: (Boolean) -> Unit) {
+        usersRef.get()
+            .addOnSuccessListener { snapshot ->
+                var isTaken = false
+
+                for (userSnap in snapshot.children) {
+                    val existingUsername = userSnap.child("username").getValue(String::class.java)
+                    if (existingUsername.equals(username, ignoreCase = true)) {
+                        isTaken = true
+                        break
+                    }
+                }
+
+                onResult(!isTaken)
+            }
+            .addOnFailureListener { error ->
+                Log.e("TripsRepo", "Username check failed", error)
+                onResult(false)
+            }
+    }
 
     fun addTrip(trip: Trip) {
 
@@ -324,6 +370,7 @@ class TripsRepository {
         }
         return total
     }
+
 
 }
 

@@ -69,4 +69,5 @@
     <string name="trip_overview_dates">From ... to ...</string>
     <string name="trip_overview_cost">1200$</string>
     <string name="map_search_bar">Look by name</string>
+    <string name="login_txt_username">Username</string>
 </resources>

@@ -6,7 +6,6 @@ import java.util.Date
 data class Trip (
     val name: String,
     val id: String,
-    val locations: Map<String,Location>,
     val startDate: Long,
     val lastDate: Long,
     val dayLogs: Map<String, DayLog>,
@@ -17,7 +16,6 @@ data class Trip (
     class Builder(
         var name: String = "",
         var id: String = "",
-        var locations: MutableMap<String, Location> = mutableMapOf(),
         var startDate: Long = System.currentTimeMillis(),
         var lastDate: Long = System.currentTimeMillis(),
         var dayLogs: MutableMap<String, DayLog> = mutableMapOf(),
@@ -26,7 +24,6 @@ data class Trip (
     ){
         fun id(id: String) = apply { this.id = id }
         fun name(name: String) = apply { this.name = name }
-        fun addLocation(id: String,location: Location) = apply { this.locations[id] = location}
         fun startDate(sDate: Date) = apply { this.startDate = sDate.time }
         fun latDate(lDate: Date) = apply { this.lastDate = lDate.time }
         fun photoUrl(url: String?) = apply { this.photoUrl = url }
@@ -35,9 +32,9 @@ data class Trip (
 
 
 
-        fun build() = Trip(name,id, locations, startDate, lastDate, dayLogs, photoUrl, cost)
+        fun build() = Trip(name,id, startDate, lastDate, dayLogs, photoUrl, cost)
     }
 
-    constructor() : this("","", mapOf(), 0L, 0L, mapOf(), null, 0.0)
+    constructor() : this("","",  0L, 0L, mapOf(), null, 0.0)
 
 }
