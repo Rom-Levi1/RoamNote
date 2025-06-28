@@ -37,6 +37,9 @@ class TripsFragment : Fragment() {
     private val tripList = mutableListOf<Trip>()
     private val repo = TripsRepository()
 
+    private val pendingTrips = mutableSetOf<String>()
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,17 +69,20 @@ class TripsFragment : Fragment() {
             val imageUri: Uri? = bundle.getParcelable("trip_image_uri")
 
             if (!tripName.isNullOrEmpty()) {
+                val lowerName = tripName.lowercase()
                 val alreadyExists = tripList.any { it.name.trim().equals(tripName, ignoreCase = true) }
 
-                if (alreadyExists) {
-                    Toast.makeText(requireContext(), "Trip \"$tripName\" already exists!", Toast.LENGTH_SHORT).show()
+                if (alreadyExists || pendingTrips.contains(lowerName)) {
+                    Toast.makeText(requireContext(), "Trip \"$tripName\" already exists or uploading...", Toast.LENGTH_SHORT).show()
                     return@setFragmentResultListener
                 }
+
+                pendingTrips.add(lowerName)
+                val tripId = randomUUID().toString()
 
                 if (imageUri != null) {
                     MediaManager().uploadImage(requireContext(), imageUri,
                         onSuccess = { imageUrl ->
-                            val tripId = randomUUID().toString()
                             val newTrip = Trip.Builder()
                                 .id(tripId)
                                 .name(tripName)
@@ -86,13 +92,15 @@ class TripsFragment : Fragment() {
                             tripAdapter.addTrip(newTrip)
                             SessionManager.currentUser?.trips?.add(newTrip)
                             repo.addTrip(newTrip)
+                            pendingTrips.remove(lowerName)
+
                         },
                         onFailure = {
                             Toast.makeText(requireContext(), "Failed to upload trip image", Toast.LENGTH_SHORT).show()
+                            pendingTrips.remove(lowerName)
                         }
                     )
                 } else {
-                    val tripId = randomUUID().toString()
                     val newTrip = Trip.Builder()
                         .id(tripId)
                         .name(tripName)
@@ -101,6 +109,7 @@ class TripsFragment : Fragment() {
                     tripAdapter.addTrip(newTrip)
                     SessionManager.currentUser?.trips?.add(newTrip)
                     repo.addTrip(newTrip)
+                    pendingTrips.remove(lowerName)
                 }
             }
         }
