@@ -127,7 +127,7 @@ class TripsFragment : Fragment() {
                             .latDate(Date(originalTrip.lastDate))
                             .cost(originalTrip.cost)
                             .apply {
-                                originalTrip.locations.forEach { addLocation(it) }
+                                originalTrip.locations.forEach { locations[it.key] = it.value }
                                 originalTrip.dayLogs.forEach { dayLogs[it.key] = it.value }
                             }
                             .build()

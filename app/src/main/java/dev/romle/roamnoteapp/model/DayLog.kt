@@ -18,8 +18,7 @@ data class DayLog(
         var hotel: Hotel? = null,
         var expenses: MutableMap<String, Expense> = mutableMapOf(),
         var activities: MutableMap<String, ActivityLog> = mutableMapOf(),
-        var photoUrl: String? = null,
-
+        var photoUrl: String? = null
     ) {
         fun date(date: Date) = apply { this.date = date.time }
         fun hotel(hotel: Hotel?) = apply { this.hotel = hotel }

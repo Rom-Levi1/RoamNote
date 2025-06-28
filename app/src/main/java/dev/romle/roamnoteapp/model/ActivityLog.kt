@@ -3,8 +3,7 @@ package dev.romle.roamnoteapp.model
 import java.io.Serializable
 
 data class ActivityLog (
-        val id: String,
-
+    val id: String,
     val name: String,
     val location: Location,
     val cost: Double,
