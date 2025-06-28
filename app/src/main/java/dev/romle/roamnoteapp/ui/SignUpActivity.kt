@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import dev.romle.roamnoteapp.data.AuthRepository
 import dev.romle.roamnoteapp.R
 import dev.romle.roamnoteapp.data.TripsRepository
+import dev.romle.roamnoteapp.data.UserRepository
 import dev.romle.roamnoteapp.databinding.ActivitySignUpBinding
 import kotlinx.coroutines.launch
 
@@ -20,9 +21,7 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignUpBinding
 
     private val authRepository = AuthRepository()
-
-    private val tripsRepo = TripsRepository()
-
+    private val userRepository = UserRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +46,7 @@ class SignUpActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            tripsRepo.isUsernameAvailable(username) { isAvailable ->
+            userRepository.isUsernameAvailable(username) { isAvailable ->
                 if (!isAvailable) {
                     Toast.makeText(this, "Username already taken", Toast.LENGTH_SHORT).show()
                     return@isUsernameAvailable
@@ -56,7 +55,7 @@ class SignUpActivity : AppCompatActivity() {
                 lifecycleScope.launch {
                     val success = authRepository.register(email, password)
                     if (success) {
-                        tripsRepo.addUsername(username)
+                        userRepository.addUsername(username)
 
                         Toast.makeText(
                             this@SignUpActivity,

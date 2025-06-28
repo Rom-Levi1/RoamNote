@@ -50,6 +50,8 @@ class MenuActivity : AppCompatActivity() {
         }
         binding.menuTxtLogOut.setOnClickListener {
             auth.logout()
+            SessionManager.currentUser = null
+
             val intent = Intent(this, LogInActivity::class.java)
             startActivity(intent)
             finish()
@@ -59,4 +61,6 @@ class MenuActivity : AppCompatActivity() {
         binding.menuBTNMap.setOnClickListener { goToMain("map") }
         binding.menuBTNForum.setOnClickListener { goToMain("forum") }
     }
+
+
 }
