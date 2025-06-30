@@ -3,6 +3,7 @@ package dev.romle.roamnoteapp.data
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import dev.romle.roamnoteapp.model.SessionManager
 
 class UserRepository {
 
@@ -34,20 +35,39 @@ class UserRepository {
             }
     }
 
-    fun loadUsername() {
+    fun loadBasicUserData(
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
         val uid = FirebaseAuth.getInstance().currentUser?.uid
-        if (uid == null) {
-            Log.e("UserRepo", "UID is null. Cannot load username.")
+        val mail = FirebaseAuth.getInstance().currentUser?.email
+
+        if (uid == null || mail == null) {
+            onFailure(Exception("User not logged in"))
             return
         }
 
         usersRef.child(uid).child("username").get()
             .addOnSuccessListener { snapshot ->
                 val username = snapshot.getValue(String::class.java)
-                Log.d("UserRepo", "Username loaded: $username")
+                if (username != null) {
+                    val user = dev.romle.roamnoteapp.model.User.Builder()
+                        .uid(uid)
+                        .mail(mail)
+                        .username(username)
+                        .trips(mutableListOf())
+                        .build()
+
+                    SessionManager.currentUser = user
+                    Log.d("UserRepo", "Basic user loaded: $username ($uid)")
+                    onSuccess()
+                } else {
+                    onFailure(Exception("Username not found in DB"))
+                }
             }
             .addOnFailureListener { error ->
-                Log.e("UserRepo", "Failed to load username", error)
+                Log.e("UserRepo", "Failed to load basic user", error)
+                onFailure(error)
             }
     }
 

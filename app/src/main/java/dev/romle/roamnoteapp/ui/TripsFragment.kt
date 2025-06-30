@@ -1,7 +1,6 @@
 package dev.romle.roamnoteapp.ui
 
 import android.app.AlertDialog
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -15,7 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dev.romle.roamnoteapp.R
-import dev.romle.roamnoteapp.TripAdapter
+import dev.romle.roamnoteapp.adaptors.TripAdapter
 import dev.romle.roamnoteapp.data.MediaManager
 import dev.romle.roamnoteapp.data.TripsRepository
 import dev.romle.roamnoteapp.databinding.FragmentTripsBinding

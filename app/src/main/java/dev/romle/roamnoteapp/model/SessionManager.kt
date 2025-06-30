@@ -4,13 +4,11 @@ object SessionManager {
     var currentUser: User? = null
 
     fun updateTrip(updatedTrip: Trip) {
-        val trips = currentUser?.trips ?: return
-
-        val newList = trips.map {
+        val oldUser = currentUser ?: return
+        val updatedTrips = oldUser.trips.map {
             if (it.id == updatedTrip.id) updatedTrip else it
-        }
+        }.toMutableList()
 
-        trips.clear()
-        trips.addAll(newList)
+        currentUser = oldUser.copy(trips = updatedTrips)
     }
 }

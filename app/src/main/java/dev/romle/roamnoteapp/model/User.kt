@@ -15,7 +15,7 @@ data class User(
         fun username(username: String) = apply { this.username = username }
         fun uid(uid: String) = apply { this.uid = uid }
         fun mail(mail: String) = apply { this.mail = mail }
-        fun addTrip(trip: Trip) = apply { (this.trips as MutableList).add(trip)}
+        fun trips(trips: MutableList<Trip>) = apply { this.trips = trips }
 
         fun build(): User = User(username,uid, mail, trips)
 
