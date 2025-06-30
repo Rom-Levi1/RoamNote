@@ -70,4 +70,7 @@
     <string name="trip_overview_cost">1200$</string>
     <string name="map_search_bar">Look by name</string>
     <string name="login_txt_username">Username</string>
+    <string name="add_post_title">New Post</string>
+    <string name="add_post_add_title">Title</string>
+    <string name="add_post_content">Content</string>
 </resources>

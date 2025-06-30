@@ -1,15 +1,13 @@
-package dev.romle.roamnoteapp
+package dev.romle.roamnoteapp.adaptors
 
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
-import android.widget.Toast
-import androidx.appcompat.view.menu.MenuBuilder
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
+import dev.romle.roamnoteapp.ImageLoader
+import dev.romle.roamnoteapp.R
 import dev.romle.roamnoteapp.databinding.TripItemBinding
 import dev.romle.roamnoteapp.model.Trip
 import java.text.SimpleDateFormat

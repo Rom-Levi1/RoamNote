@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.dialogfragments.AddPostFragment"
+    android:orientation="vertical">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/add_post_LBL_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_post_title"
+        android:textStyle="bold"
+        android:textSize="@dimen/trips_title_size"
+        android:textColor="@color/Bagy_blue"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/login_title_margin"
+        />
+
+    <LinearLayout
+        android:id="@+id/add_post_selector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/edit_text_box"
+        android:padding="@dimen/log_padding"
+        android:layout_marginHorizontal="@dimen/logo_margin"
+        android:layout_gravity="center_horizontal">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/add_post_TXT_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/add_post_add_title"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="@dimen/log_button_size"
+            android:layout_gravity="center_vertical"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/add_post_selector1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/edit_text_box"
+        android:padding="@dimen/log_padding"
+        android:layout_marginTop="@dimen/logo_margin"
+        android:layout_marginHorizontal="@dimen/logo_margin"
+        android:layout_gravity="center_vertical">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/add_post_TXT_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/add_post_content"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="@dimen/log_button_size"
+            android:layout_gravity="center_vertical"
+            android:inputType="textMultiLine"
+            android:minLines="1"
+            android:gravity="top|start"
+            />
+
+    </LinearLayout>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/add_post_BTN_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/logo_margin"
+        android:backgroundTint="@color/Bagy_orange"
+        android:textColor="@color/white"
+        android:text="@string/trips_save"
+        android:layout_marginTop="@dimen/trips_add_trips_top_margin"
+        />
+
+
+
+
+
+</LinearLayout>

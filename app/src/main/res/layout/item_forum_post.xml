@@ -5,7 +5,10 @@
     android:layout_height="wrap_content"
     android:background="@drawable/edit_text_box"
     android:padding="16dp"
-    android:layout_marginBottom="12dp">
+    android:layout_marginBottom="12dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
 
 
         <com.google.android.material.textview.MaterialTextView
