@@ -28,8 +28,8 @@ class AuthRepository {
                         continuation.resume(true)
 
                 }
-                .addOnFailureListener {
-                    println(tag + "register failure")
+                .addOnFailureListener {e ->
+                    println(tag + "register failure ${e.message}")
                     continuation.resume(false)
                 }
             }
@@ -51,8 +51,8 @@ class AuthRepository {
                     println(tag + "login success")
                     continuation.resume(true)
                 }
-                .addOnFailureListener {
-                    println(tag + "login failure")
+                .addOnFailureListener {e->
+                    println(tag + "login failure: ${e.message}")
                     continuation.resume(false)
                 }
             }
