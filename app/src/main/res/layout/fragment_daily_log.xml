@@ -12,19 +12,45 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+
         >
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/log_LBL_title"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/daily_log_title"
-            android:textStyle="bold"
-            android:textSize="@dimen/trips_title_size"
-            android:textColor="@color/Bagy_blue"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="@dimen/login_title_margin"
-            />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_margin="@dimen/login_title_margin">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/log_LBL_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/daily_log_title"
+                android:textStyle="bold"
+                android:textSize="@dimen/trips_title_size"
+                android:textColor="@color/Bagy_blue" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/log_IMG_clear"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/delete_24px"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="@color/Bagy_blue"
+                android:layout_marginStart="@dimen/logo_margin" />
+        </LinearLayout>
+
 
         <LinearLayout
             android:id="@+id/trip_selector"

@@ -62,7 +62,7 @@ class SignUpActivity : AppCompatActivity() {
                             "Registered & logged in! successfully",
                             Toast.LENGTH_SHORT
                         ).show()
-                        startActivity(Intent(this@SignUpActivity, MainActivity::class.java))
+                        startActivity(Intent(this@SignUpActivity, MenuActivity::class.java))
                         finish()
                     } else {
                         Toast.makeText(

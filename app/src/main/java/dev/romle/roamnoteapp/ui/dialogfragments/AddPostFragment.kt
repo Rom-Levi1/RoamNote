@@ -43,6 +43,15 @@ class AddPostFragment : DialogFragment() {
     }
 
     private fun initView() {
+        val editPost = arguments?.getSerializable("edit_post") as? ForumPost
+        val isEdit = editPost != null
+
+        if (isEdit) {
+            binding.addPostLBLTitle.text = "Edit Post"
+            binding.addPostTXTTitle.setText(editPost?.title)
+            binding.addPostTXTContent.setText(editPost?.content)
+        }
+
         binding.addPostBTNSave.setOnClickListener {
             val title = binding.addPostTXTTitle.text.toString().trim()
             val content = binding.addPostTXTContent.text.toString().trim()
@@ -52,17 +61,20 @@ class AddPostFragment : DialogFragment() {
                 return@setOnClickListener
             }
 
-            val post = ForumPost.Builder()
+            val updatedPost = ForumPost.Builder()
+                .id(editPost?.id ?: "")
                 .title(title)
                 .content(content)
                 .userId(SessionManager.currentUser?.uid ?: "unknown")
                 .username(SessionManager.currentUser?.username ?: "anonymous")
+                .timestamp(editPost?.timestamp ?: System.currentTimeMillis())
                 .build()
 
-            val bundle = Bundle()
-            bundle.putSerializable("post", post)
+            val bundle = Bundle().apply {
+                putSerializable(if (isEdit) "edit_post" else "post", updatedPost)
+            }
 
-            parentFragmentManager.setFragmentResult("new_post",bundle)
+            parentFragmentManager.setFragmentResult(if (isEdit) "edit_post" else "new_post", bundle)
             dismiss()
         }
     }

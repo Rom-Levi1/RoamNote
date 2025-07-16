@@ -103,6 +103,58 @@ class TripsRepository {
             }
     }
 
+    fun deleteDayLog(trip: Trip, logDate: Long, onComplete: () -> Unit) {
+        val dateId = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date(logDate))
+        val dayLogRef = tripsRef.child(trip.id).child("dayLogs").child(dateId)
+        val tripRef = tripsRef.child(trip.id)
+
+        dayLogRef.get()
+            .addOnSuccessListener { snapshot ->
+                val log = snapshot.getValue(DayLog::class.java)
+                val photoUrl = log?.photoUrl
+
+                // Delete image if exists
+                if (!photoUrl.isNullOrBlank()) {
+                    MediaManager().deleteImage(photoUrl)
+                }
+
+                // Remove the day log
+                dayLogRef.removeValue().addOnSuccessListener {
+                    // Recalculate trip fields
+                    tripRef.child("dayLogs").get().addOnSuccessListener { remainingLogsSnapshot ->
+                        val totalCost = calculateTotalTripCost(remainingLogsSnapshot.children)
+                        var minDate = Long.MAX_VALUE
+                        var maxDate = Long.MIN_VALUE
+
+                        for (logSnap in remainingLogsSnapshot.children) {
+                            val dayLog = logSnap.getValue(DayLog::class.java)
+                            if (dayLog != null) {
+                                if (dayLog.date < minDate) minDate = dayLog.date
+                                if (dayLog.date > maxDate) maxDate = dayLog.date
+                            }
+                        }
+
+                        val tripUpdates = mutableMapOf<String, Any?>(
+                            "cost" to totalCost,
+                            "startDate" to if (minDate != Long.MAX_VALUE) minDate else 0,
+                            "lastDate" to if (maxDate != Long.MIN_VALUE) maxDate else 0
+                        )
+
+                        tripRef.updateChildren(tripUpdates).addOnSuccessListener {
+                            Log.d("TripsRepo", "Trip updated after DayLog deletion")
+                            onComplete()
+                        }.addOnFailureListener {
+                            Log.e("TripsRepo", "Failed to update trip fields after DayLog deletion", it)
+                            onComplete()
+                        }
+                    }
+                }
+            }
+            .addOnFailureListener {
+                Log.e("TripsRepo", "Failed to fetch DayLog before deletion", it)
+            }
+    }
+
 
     fun addActivity(trip: Trip, logDate: Long, activityId: String, activity: ActivityLog) {
 

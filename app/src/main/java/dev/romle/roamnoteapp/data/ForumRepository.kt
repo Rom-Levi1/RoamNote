@@ -3,11 +3,10 @@ package dev.romle.roamnoteapp.data
 import android.util.Log
 import com.google.firebase.database.FirebaseDatabase
 import dev.romle.roamnoteapp.model.ForumPost
-import dev.romle.roamnoteapp.model.Trip
 
 class ForumRepository {
 
-    private val forumRef = FirebaseDatabase.getInstance().getReference("forumPosts")
+    private val forumRef = FirebaseDatabase.getInstance().getReference("forum")
 
     fun addPost(post: ForumPost, onSuccess: (ForumPost) -> Unit, onFailure: (Exception) -> Unit) {
         val postId = forumRef.push().key
@@ -39,25 +38,28 @@ class ForumRepository {
             }
     }
 
-    fun loadPosts(callback: (List<ForumPost>) -> Unit){
+    fun loadPosts(callback: (List<ForumPost>) -> Unit) {
         forumRef.get()
-            .addOnSuccessListener { snapShot ->
-                val posts = mutableListOf<ForumPost>()
-                for (postSnap in snapShot.children)
-                {
-                    val post = postSnap.getValue(ForumPost::class.java)
-                    if (post != null)
-                    {
-                        posts.add(post)
-                    }
-                }
+            .addOnSuccessListener { snapshot ->
+                val now = System.currentTimeMillis()
+                val twoWeeksMillis = 14 * 24 * 60 * 60 * 1000L
+
+                val posts = snapshot.children.mapNotNull { it.getValue(ForumPost::class.java) }
+                    .filter { now - it.timestamp <= twoWeeksMillis } // Only keep recent posts
+                    .sortedByDescending { it.timestamp }
 
                 callback(posts)
             }
             .addOnFailureListener { error ->
                 Log.e("ForumRepo", "Failed to load forum posts", error)
-                callback(emptyList()) // Or handle the error more gracefully
+                callback(emptyList())
             }
+    }
+
+    fun updatePost(post: ForumPost, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        forumRef.child(post.id).setValue(post)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onFailure(it) }
     }
 }
 

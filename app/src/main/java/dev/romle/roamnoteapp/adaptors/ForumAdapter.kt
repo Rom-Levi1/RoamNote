@@ -61,4 +61,13 @@ class ForumAdapter : RecyclerView.Adapter<ForumAdapter.ForumViewHolder>() {
             notifyItemRemoved(index)
         }
     }
+
+    //update edited post
+    fun updatePost(updatedPost: ForumPost) {
+        val index = posts.indexOfFirst { it.id == updatedPost.id }
+        if (index != -1) {
+            posts[index] = updatedPost
+            notifyItemChanged(index)
+        }
+    }
 }

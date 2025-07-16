@@ -91,6 +91,35 @@ class DailyLogFragment : Fragment() {
     private fun initViews() {
 
 
+        binding.logIMGClear.setOnClickListener {
+            if (selectedTrip == null) {
+                Toast.makeText(requireContext(), "Please select a trip", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            AlertDialog.Builder(requireContext())
+                .setTitle("Clear Day Log")
+                .setMessage("Are you sure you want to delete this day's log? This will remove all associated data.")
+                .setPositiveButton("Delete") { _, _ ->
+                    repo.deleteDayLog(selectedTrip!!, selectedDate) {
+                        // Clear UI and local state
+                        resetLocalData()
+
+                        // Update local trip & SessionManager
+                        val dateKey = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date(selectedDate))
+                        val updatedLogs = selectedTrip!!.dayLogs.toMutableMap().apply {
+                            remove(dateKey)
+                        }
+
+                        selectedTrip = selectedTrip!!.copy(dayLogs = updatedLogs)
+                        SessionManager.updateTrip(selectedTrip!!)
+
+                        Toast.makeText(requireContext(), "Day log deleted", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
+        }
 
         handleSpinner()
 
