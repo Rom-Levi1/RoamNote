@@ -42,10 +42,10 @@ class ForumRepository {
         forumRef.get()
             .addOnSuccessListener { snapshot ->
                 val now = System.currentTimeMillis()
-                val twoWeeksMillis = 14 * 24 * 60 * 60 * 1000L
+                val threeWeeksMillis = 21 * 24 * 60 * 60 * 1000L
 
                 val posts = snapshot.children.mapNotNull { it.getValue(ForumPost::class.java) }
-                    .filter { now - it.timestamp <= twoWeeksMillis } // Only keep recent posts
+                    .filter { now - it.timestamp <= threeWeeksMillis } // Only keep recent posts
                     .sortedByDescending { it.timestamp }
 
                 callback(posts)
