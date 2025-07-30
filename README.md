@@ -40,3 +40,22 @@ Built with Kotlin, Firebase, and Google Maps, it keeps your adventures organized
 
 📸 Screenshots
 
+
+<p>
+<img src="Screenshot_homescreen.png" width="35%" style="margin-right: 4%;"/>
+<img src="Screenshot_menu.png" width="35%"/>
+<p>
+  
+<p>
+<img src="Screenshot_trip.png" width="35%" style="margin-right: 4%;"/>
+<img src="Screenshot_trip_info.png" width="35%"/>
+<p>
+
+<p>
+<img src="Screenshot_daily_log.png" width="35%" style="margin-right: 4%;"/>
+<img src="Screenshot_map.png" width="35%"/>
+<p>
+
+<p>
+<img src="Screenshot_forum_screen.png" width="35%" style="margin-right: 4%;"/>
+<p>
