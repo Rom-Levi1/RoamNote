@@ -25,15 +25,36 @@
         android:layout_margin="@dimen/login_title_margin"
         />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/forum_BTN_new_post"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/logo_margin"
-        android:backgroundTint="@color/Bagy_orange"
-        android:textColor="@color/white"
-        android:text="@string/forum_new_post"
-        />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/forum_BTN_new_post"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/logo_margin"
+            android:backgroundTint="@color/Bagy_orange"
+            android:textColor="@color/white"
+            android:layout_weight="7"
+            android:text="@string/forum_new_post"
+            android:layout_gravity="center_vertical"
+            />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/forum_IMG_menu"
+                android:layout_width="0dp"
+                android:layout_height="55dp"
+                android:layout_weight="1"
+                android:src="@drawable/outline_dehaze_24"
+                android:contextClickable="true"
+                android:layout_marginRight="@dimen/logo_margin"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="@color/Bagy_blue"
+                />
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/main_RV_list"

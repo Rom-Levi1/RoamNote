@@ -3,6 +3,7 @@ package dev.romle.roamnoteapp.data
 import android.util.Log
 import com.google.firebase.database.FirebaseDatabase
 import dev.romle.roamnoteapp.model.ForumPost
+import dev.romle.roamnoteapp.model.SessionManager
 
 class ForumRepository {
 
@@ -52,6 +53,21 @@ class ForumRepository {
             }
             .addOnFailureListener { error ->
                 Log.e("ForumRepo", "Failed to load forum posts", error)
+                callback(emptyList())
+            }
+    }
+
+    fun loadUserPosts(callback: (List<ForumPost>) -> Unit){
+        forumRef.get()
+            .addOnSuccessListener { snapshot ->
+                val posts = snapshot.children.mapNotNull { it.getValue(ForumPost::class.java) }
+                    .filter { SessionManager.currentUser?.uid == it.userId } // Only keep recent posts
+                    .sortedByDescending { it.timestamp }
+
+                callback(posts)
+            }
+            .addOnFailureListener { error ->
+                Log.e("ForumRepo", "Failed to load users posts", error)
                 callback(emptyList())
             }
     }
