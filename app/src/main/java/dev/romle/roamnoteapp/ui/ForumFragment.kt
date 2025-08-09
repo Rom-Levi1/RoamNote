@@ -43,6 +43,10 @@ class ForumFragment : Fragment() {
         _binding = FragmentForumBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        binding.forumIMGMenu.setOnClickListener {
+            showForumPopupMenu(it)
+        }
+
         return root
     }
 
@@ -131,6 +135,35 @@ class ForumFragment : Fragment() {
         }
 
         popup.show()
+    }
+
+    private fun showForumPopupMenu(anchor: View) {
+        val popupMenu = androidx.appcompat.widget.PopupMenu(requireContext(), anchor)
+
+        popupMenu.menu.add(0, 0, 0, "My posts")
+        popupMenu.menu.add(0, 1, 1, "General forum")
+
+        popupMenu.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                0 -> {
+                    // Handle "My posts"
+                    forumRepo.loadUserPosts { loadedPosts ->
+                        forumAdapter.setPosts(loadedPosts)
+                    }
+                    true
+                }
+                1 -> {
+                    // Handle "General forum"
+                    forumRepo.loadPosts { loadedPosts ->
+                        forumAdapter.setPosts(loadedPosts)
+                    }
+                    true
+                }
+                else -> false
+            }
+        }
+
+        popupMenu.show()
     }
 
     private fun onDeletePost(post: ForumPost) {
